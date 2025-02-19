@@ -1,19 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="E:\projectAnnihilation\Src\Character.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projectAnnihilation\Src\EntityManager.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\EntityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projectAnnihilation\Src\GameLoop.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\GameLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projectAnnihilation\Src\MapLoader.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\MapLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projectAnnihilation\Src\MovementSystem.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\MovementSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\Src\GameMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\Src\main.cpp">
@@ -21,19 +24,25 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="E:\projectAnnihilation\Src\Character.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\Src\EntityManager.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\Src\GameLoop.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\GameLoop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\Src\MapLoader.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\MapLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\Src\MovementSystem.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\MovementSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\Src\GameMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\Src\GameTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

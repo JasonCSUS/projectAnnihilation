@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_TOOLCHAIN_FILE "E:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.h engine/*.cpp engine/*.h)
 
 find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)

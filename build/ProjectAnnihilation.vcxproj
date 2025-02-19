@@ -425,17 +425,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="E:\projectAnnihilation\Src\Character.cpp" />
-    <ClInclude Include="E:\projectAnnihilation\Src\Character.h" />
-    <ClCompile Include="E:\projectAnnihilation\Src\EntityManager.cpp" />
-    <ClInclude Include="E:\projectAnnihilation\Src\EntityManager.h" />
-    <ClCompile Include="E:\projectAnnihilation\Src\GameLoop.cpp" />
-    <ClInclude Include="E:\projectAnnihilation\Src\GameLoop.h" />
-    <ClCompile Include="E:\projectAnnihilation\Src\MapLoader.cpp" />
-    <ClInclude Include="E:\projectAnnihilation\Src\MapLoader.h" />
-    <ClCompile Include="E:\projectAnnihilation\Src\MovementSystem.cpp" />
-    <ClInclude Include="E:\projectAnnihilation\Src\MovementSystem.h" />
-    <ClCompile Include="E:\projectAnnihilation\Src\main.cpp" />
+    <ClCompile Include="E:\projectAnnihilation\engine\Character.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\Character.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\EntityManager.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\EntityManager.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\GameLoop.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\GameLoop.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\MapLoader.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\MapLoader.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\MovementSystem.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\MovementSystem.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\main.cpp" />
+    <ClCompile Include="E:\projectAnnihilation\src\GameMain.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\src\GameMain.h" />
+    <ClInclude Include="E:\projectAnnihilation\src\GameTypes.h" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
