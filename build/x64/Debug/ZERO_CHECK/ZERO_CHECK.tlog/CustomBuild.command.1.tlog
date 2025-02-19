@@ -1,0 +1,10 @@
+^E:\PROJECTANNIHILATION\BUILD\CMAKEFILES\3DAB664DE53B36D14A9C790BDDF22ECF\GENERATE.STAMP.RULE
+setlocal
+E:\Cmake\bin\cmake.exe -SE:/projectAnnihilation -BE:/projectAnnihilation/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/projectAnnihilation/build/ProjectAnnihilation.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
