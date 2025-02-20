@@ -30,7 +30,7 @@ void AddMapTile(const std::string& file, int x, int y, SDL_Renderer* renderer) {
     }
 }
 
-void GameLoop(SDL_Window* window, SDL_Renderer* renderer, EntityManager& entityManager, UpdateFunc updateGame) {
+void GameLoop(SDL_Window* window, SDL_Renderer* renderer, EntityManager& entityManager, AnimationManager& animationManager, UpdateFunc updateGame) {
     bool running = true;
     SDL_Event event;
 
@@ -62,11 +62,11 @@ void GameLoop(SDL_Window* window, SDL_Renderer* renderer, EntityManager& entityM
 
         float deltaTime = 0.016f;
         updateGame(deltaTime);
-        entityManager.UpdateEntities(deltaTime);
+        entityManager.UpdateEntities(deltaTime, animationManager);
 
         SDL_RenderClear(renderer);
         RenderMap(renderer, mapTiles, camera.x, camera.y);
-        entityManager.RenderEntities(renderer, cameraOffset);
+        entityManager.RenderEntities(renderer, animationManager, cameraOffset);
         SDL_RenderPresent(renderer);
     }
 
