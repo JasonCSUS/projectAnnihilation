@@ -7,35 +7,30 @@
 #include <string>
 #include <SDL3/SDL.h>
 
+enum AnimState { IDLE, MOVING, ATTACKING };
+
 struct Animation {
-    Sprite* frames;
-    int frameCount;
+    std::vector<Sprite> frames;
     float frameTime;
-    float elapsedTime = 0;
-    int currentFrame = 0;
     int spriteW, spriteH; // Track width and height here
-
-    void Update(float deltaTime) {
-        elapsedTime += deltaTime;
-        if (elapsedTime >= frameTime) {
-            elapsedTime = 0;
-            currentFrame = (currentFrame + 1) % frameCount;
-        }
-    }
-
+    float elapsedTime;
+    int currentFrame;
+    AnimState lastState = IDLE;
+    bool changeState = false;
     Sprite& GetCurrentFrame() { return frames[currentFrame]; }
 };
 
 class AnimationManager {
 public:
-    void AddAnimation(int entityId, Animation* animation);
+    void AddAnimation(int entityId, Animation animation);
+    Animation& GetAnimation(int entityId);
+    void SwapSprite(int entityId, std::vector<Sprite> newSprite);
+    void RenderEntity(SDL_Renderer* renderer, SDL_Texture* spriteSheet, Animation animation, int x, int y, bool flip);
+    void AnimationManager::SetChangeState(int entityId, bool state);
+    void RemoveAnimation(int entityId);
     void UpdateAnimations(float deltaTime);
-    Animation* GetAnimation(int entityId);
-    void SwapSprite(int entityId, Sprite* newSprite);
-    void RenderEntity(SDL_Renderer* renderer, SDL_Texture* spriteSheet, Animation* animation, int x, int y, bool flip);
-
 private:
-    std::map<int, Animation*> animations;
+    std::map<int, Animation> animations;
 };
 
 #endif

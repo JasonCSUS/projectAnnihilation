@@ -2,7 +2,11 @@ E:\projectAnnihilation\engine\AnimationManager.cpp;E:\projectAnnihilation\build\
 E:\projectAnnihilation\engine\Character.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\Character.obj
 E:\projectAnnihilation\engine\EntityManager.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\EntityManager.obj
 E:\projectAnnihilation\engine\GameLoop.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\GameLoop.obj
+E:\projectAnnihilation\engine\GlobalTasks.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\GlobalTasks.obj
+E:\projectAnnihilation\engine\InputHandler.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\InputHandler.obj
 E:\projectAnnihilation\engine\MapLoader.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\MapLoader.obj
 E:\projectAnnihilation\engine\MovementSystem.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\MovementSystem.obj
+E:\projectAnnihilation\engine\NavMesh.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\NavMesh.obj
 E:\projectAnnihilation\engine\main.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\main.obj
+E:\projectAnnihilation\src\EntityLogic.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\EntityLogic.obj
 E:\projectAnnihilation\src\GameMain.cpp;E:\projectAnnihilation\build\ProjectAnnihilation.dir\Debug\GameMain.obj

@@ -6,72 +6,60 @@
 #include "Character.h"
 #include "MovementSystem.h"
 #include "MapTile.h" 
+#include "InputHandler.h"
 #include <vector>
 
 struct Camera {
-    float x = 1000.0f;
-    float y = 1000.0f;
+    float x = 500.0f;
+    float y = 500.0f;
+    float w;
+    float h;
+
+    void Initialize(SDL_Window* window) {
+        int windowW, windowH;
+        SDL_GetWindowSize(window, &windowW, &windowH);
+        w = static_cast<float>(windowW);
+        h = static_cast<float>(windowH);
+    }
 } camera;
+
 
 bool dragging = false;
 int lastX, lastY;
 
-
-// Store tiles in a vector
-std::vector<MapTile> mapTiles;
-
-void AddMapTile(const std::string& file, int x, int y, SDL_Renderer* renderer) {
-    SDL_Texture* texture = LoadTexture(file, renderer);
-    if (texture) {
-        mapTiles.push_back({ texture, x, y });
-        std::cout << "Added map tile: " << file << " at (" << x << ", " << y << ")" << std::endl;
-    } else {
-        std::cerr << "Failed to load map tile: " << file << std::endl;
-    }
-}
-
-void GameLoop(SDL_Window* window, SDL_Renderer* renderer, EntityManager& entityManager, AnimationManager& animationManager, UpdateFunc updateGame) {
+void GameLoop(SDL_Window* window, SDL_Renderer* renderer, MapLoader& mapLoader, EntityManager& entityManager, InputHandler& inputHandler, UpdateFunc updateGame) {
     bool running = true;
     SDL_Event event;
-
-    SDL_FRect cameraOffset = { camera.x, camera.y, 0, 0 };
+    camera.Initialize(window); 
+    uint64_t lastCounter = SDL_GetTicks();
     while (running) {
         while (SDL_PollEvent(&event)) {
+            //remove this later when exiting is implemented in input handler
             if (event.type == SDL_EVENT_QUIT || (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
                 running = false;
             }
-            entityManager.HandleInput(event);
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-                dragging = true;
-                lastX = event.button.x;
-                lastY = event.button.y;
+            if (event.type == SDL_EVENT_WINDOW_RESIZED) {
+                int newWidth = event.window.data1;
+                int newHeight = event.window.data2;
+                
+                // Update camera width and height
+                camera.w = static_cast<float>(newWidth);
+                camera.h = static_cast<float>(newHeight);
             }
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-                dragging = false;
-            }
-            if (event.type == SDL_EVENT_MOUSE_MOTION && dragging) {
-                int dx = event.motion.x - lastX;
-                int dy = event.motion.y - lastY;
-                camera.x -= dx;
-                camera.y -= dy;
-                lastX = event.motion.x;
-                lastY = event.motion.y;
-            }
-            cameraOffset = { camera.x, camera.y, 0, 0 };
+            inputHandler.HandleInput(event, entityManager, mapLoader, camera.x, camera.y);
         }
-
-        float deltaTime = 0.016f;
+        uint64_t currentCounter = SDL_GetTicks();
+        float deltaTime = (float)((currentCounter - lastCounter) / 1000.0f);
+        lastCounter = currentCounter;
         updateGame(deltaTime);
-        entityManager.UpdateEntities(deltaTime, animationManager);
+        entityManager.UpdateEntities(deltaTime);
+        entityManager.RemoveDeadEntities();
 
         SDL_RenderClear(renderer);
-        RenderMap(renderer, mapTiles, camera.x, camera.y);
-        entityManager.RenderEntities(renderer, animationManager, cameraOffset);
+        mapLoader.RenderMap(renderer, camera.x, camera.y);
+        entityManager.RenderEntities(renderer, camera.x, camera.y, camera.w, camera.h, deltaTime);
+        NavMesh::Instance().DebugRender(renderer, camera.x, camera.y);
         SDL_RenderPresent(renderer);
     }
-
-    for (auto& tile : mapTiles) {
-        SDL_DestroyTexture(tile.texture);
-    }
-    mapTiles.clear();
+    mapLoader.Clear();
 }

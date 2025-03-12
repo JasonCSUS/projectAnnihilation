@@ -13,13 +13,25 @@
     <ClCompile Include="E:\projectAnnihilation\engine\GameLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\GlobalTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\MapLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\MovementSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\EntityLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\src\GameMain.cpp">
@@ -36,7 +48,16 @@
     <ClInclude Include="E:\projectAnnihilation\engine\EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\EntityStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\engine\GameLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\GlobalTasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\engine\MapLoader.h">
@@ -48,10 +69,13 @@
     <ClInclude Include="E:\projectAnnihilation\engine\MovementSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\src\GameMain.h">
+    <ClInclude Include="E:\projectAnnihilation\engine\NavMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\projectAnnihilation\src\GameTypes.h">
+    <ClInclude Include="E:\projectAnnihilation\src\EntityLogic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\GameMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

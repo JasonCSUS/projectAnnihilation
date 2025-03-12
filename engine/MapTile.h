@@ -2,6 +2,7 @@
 #define MAPTILE_H
 
 #include <SDL3/SDL.h>
+#include "NavMesh.h"
 
 // Struct representing a map tile with a texture and world position
 struct MapTile {
