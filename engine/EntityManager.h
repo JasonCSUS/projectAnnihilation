@@ -5,13 +5,15 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <future>
+
 #include "Character.h"
 #include "MovementSystem.h"
 #include "AnimationManager.h"
 #include "GameLoop.h"
 #include "MapLoader.h"
-#include <future>
-// Entity structure now holds the necessary data for each entity.
+#include "NavMesh.h"
+
 struct Entity {
     int id;
     int controller;
@@ -22,14 +24,22 @@ struct Entity {
     float visionRange;
     float attackRange;
     int hp;
-    bool isDead = false; 
+    bool isDead = false;
     Direction lastDirection = DOWN;
+
+    // MovementSystem consumes this.
     std::vector<Vec2> path;
+
+    // NavigationSystem-owned transitional navigation state.
     int lastQueuedDestX = -1;
     int lastQueuedDestY = -1;
     std::future<std::vector<Vec2>> asyncPathFuture;
     bool hasPendingPathUpdate = false;
     float nextPathUpdateTime = 0.0f;
+
+    bool navHasMoveTarget = false;
+    int navTargetX = -1;
+    int navTargetY = -1;
 };
 
 class EntityManager {
@@ -38,9 +48,10 @@ public:
     void AddEntity(int controller, int radius, const SDL_FRect& position, int unitType, Animation animation, float speed, float visionRange, float attackRange, int hp);
     void RenderEntities(SDL_Renderer* renderer, float& cameraX, float& cameraY, float& cameraW, float& cameraH, float deltaTime);
     void UpdateEntities(float deltaTime);
-    //void EntityManager::SetEntityPath(MapLoader& mapLoader, int entityId, int targetX, int targetY);
-    void EntityManager::RemoveDeadEntities();
+    void RemoveDeadEntities();
+
     std::vector<Entity> entities;
+
 private:
     std::map<int, SDL_Texture*> spriteSheets;
     MovementSystem movementSystem;

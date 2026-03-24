@@ -2,24 +2,34 @@
 #define INPUTHANDLER_H
 
 #include <SDL3/SDL.h>
-#include "NavMesh.h"
 #include "MapLoader.h"
+#include "NavigationSystem.h"
 
 class EntityManager;
 struct Entity;
 
 class InputHandler {
 public:
-    virtual ~InputHandler() = default; // Ensure proper cleanup for derived classes
+    virtual ~InputHandler() = default;
     virtual void HandleInput(const SDL_Event& event, EntityManager& entityManager, MapLoader& mapLoader, float& cameraX, float& cameraY);
     virtual Entity* GetSelectedEntity();
 
+private:
+    Entity* FindSelectedEntity(EntityManager& entityManager);
+    bool IsEntityNearDestination(const Entity& entity, float destX, float destY, float tolerance) const;
+
 protected:
-    int selectedEntity = -1; // -1 means no entity is selected.
-    int startX = 0, startY = 0;  // Track initial mouse position for drag detection
-    int lastX = 0, lastY = 0;    // Track last mouse position for movement
+    int selectedEntity = -1;
+    int startX = 0, startY = 0;
+    int lastX = 0, lastY = 0;
     bool dragging = false;
-    const int DRAG_THRESHOLD = 20; // Threshold to determine dragging vs. click
+    const int DRAG_THRESHOLD = 20;
+
+    // Player move target tracking
+    bool hasMoveDestination = false;
+    float moveDestinationX = 0.0f;
+    float moveDestinationY = 0.0f;
+    float arrivalTolerance = 20.0f;
 };
 
 #endif

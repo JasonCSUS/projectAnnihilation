@@ -431,7 +431,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="E:\projectAnnihilation\engine\Character.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\EntityManager.cpp" />
     <ClInclude Include="E:\projectAnnihilation\engine\EntityManager.h" />
-    <ClInclude Include="E:\projectAnnihilation\engine\EntityStats.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\GameLoop.cpp" />
     <ClInclude Include="E:\projectAnnihilation\engine\GameLoop.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\GlobalTasks.cpp" />
@@ -440,11 +439,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="E:\projectAnnihilation\engine\InputHandler.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\MapLoader.cpp" />
     <ClInclude Include="E:\projectAnnihilation\engine\MapLoader.h" />
-    <ClInclude Include="E:\projectAnnihilation\engine\MapTile.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\MovementSystem.cpp" />
     <ClInclude Include="E:\projectAnnihilation\engine\MovementSystem.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\NavMesh.cpp" />
     <ClInclude Include="E:\projectAnnihilation\engine\NavMesh.h" />
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationSystem.cpp" />
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationSystem.h" />
     <ClCompile Include="E:\projectAnnihilation\engine\main.cpp" />
     <ClCompile Include="E:\projectAnnihilation\src\EntityLogic.cpp" />
     <ClInclude Include="E:\projectAnnihilation\src\EntityLogic.h" />

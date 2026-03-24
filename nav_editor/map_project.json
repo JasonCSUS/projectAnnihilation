@@ -1,0 +1,98 @@
+{
+  "canvas_width": 4000,
+  "canvas_height": 4000,
+  "grid_size": 20,
+  "snap_distance": 16,
+  "simplify_tolerance": 6.0,
+  "circle_resolution": 32,
+  "items": [
+    {
+      "id": 3,
+      "category": "nav",
+      "kind": "circle",
+      "x": 20.0,
+      "y": 20.0,
+      "w": 660.0,
+      "h": 660.0,
+      "label": "room_0",
+      "role": "room"
+    },
+    {
+      "id": 5,
+      "category": "nav",
+      "kind": "rect",
+      "x": 660.0,
+      "y": 280.0,
+      "w": 480.0,
+      "h": 160.0,
+      "label": "corridor_1",
+      "role": "corridor"
+    },
+    {
+      "id": 7,
+      "category": "nav",
+      "kind": "circle",
+      "x": 1080.0,
+      "y": 120.0,
+      "w": 560.0,
+      "h": 560.0,
+      "label": "room_1",
+      "role": "room"
+    },
+    {
+      "id": 9,
+      "category": "nav",
+      "kind": "rect",
+      "x": 1280.0,
+      "y": 660.0,
+      "w": 180.0,
+      "h": 400.0,
+      "label": "corridor_2",
+      "role": "corridor"
+    },
+    {
+      "id": 11,
+      "category": "nav",
+      "kind": "circle",
+      "x": 1000.0,
+      "y": 980.0,
+      "w": 540.0,
+      "h": 540.0,
+      "label": "room_2",
+      "role": "room"
+    },
+    {
+      "id": 12,
+      "category": "trigger",
+      "kind": "circle",
+      "x": 20.0,
+      "y": 20.0,
+      "w": 660.0,
+      "h": 660.0,
+      "label": "trigger_1",
+      "role": ""
+    },
+    {
+      "id": 13,
+      "category": "point",
+      "kind": "point",
+      "x": 340.0,
+      "y": 340.0,
+      "w": 0.0,
+      "h": 0.0,
+      "label": "player_spawn",
+      "role": ""
+    },
+    {
+      "id": 14,
+      "category": "object",
+      "kind": "circle",
+      "x": 1140.0,
+      "y": 1120.0,
+      "w": 80.0,
+      "h": 80.0,
+      "label": "enemy1_1",
+      "role": ""
+    }
+  ]
+}

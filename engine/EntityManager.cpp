@@ -2,10 +2,10 @@
 #include "AnimationManager.h"
 #include "GameLoop.h"
 #include "MapLoader.h"
+#include "NavigationSystem.h"
+
 #include <SDL3/SDL.h>
 #include <iostream>
-#include <future>
-#include <chrono>
 
 bool CheckCircularCollision(const SDL_FRect& a, int radiusA, const SDL_FRect& b, int radiusB) {
     float ax = a.x + a.w / 2;
@@ -30,11 +30,23 @@ void EntityManager::LoadTexture(int unitType, SDL_Texture* texture) {
 }
 
 void EntityManager::AddEntity(int controller, int radius, const SDL_FRect& position, int unitType, Animation animation, float speed, float visionRange, float attackRange, int hp) {
-    static int nextID = 1; // Persistent counter for unique IDs
-    int id = nextID++; // Assign and increment ID
-    std::cout << "Adding entity: " << id << " controlled by: " << controller << std::endl;
-    animationManager.AddAnimation(id, animation);    
-    entities.push_back({id, controller, radius, position, unitType, speed, visionRange, attackRange, hp});
+    static int nextID = 1;
+
+    Entity entity{};
+    entity.id = nextID++;
+    entity.controller = controller;
+    entity.radius = radius;
+    entity.position = position;
+    entity.unitType = unitType;
+    entity.speed = speed;
+    entity.visionRange = visionRange;
+    entity.attackRange = attackRange;
+    entity.hp = hp;
+
+    std::cout << "Adding entity: " << entity.id << " controlled by: " << controller << std::endl;
+
+    animationManager.AddAnimation(entity.id, animation);
+    entities.push_back(std::move(entity));
 }
 
 void EntityManager::RemoveDeadEntities() {
@@ -48,50 +60,47 @@ void EntityManager::RemoveDeadEntities() {
     }
 }
 
-void EntityManager::UpdateEntities(float deltaTime) {    
+void EntityManager::UpdateEntities(float deltaTime) {
+    NavigationSystem::Instance().Update(*this, deltaTime);
     movementSystem.Update(entities, animationManager, deltaTime);
     animationManager.UpdateAnimations(deltaTime);
+
     /*
     for (size_t i = 0; i < entities.size(); i++) {
         for (size_t j = i + 1; j < entities.size(); j++) {
             if (CheckCircularCollision(entities[i].position, entities[i].radius, entities[j].position, entities[j].radius)) {
-                std::cout << "Collision detected between Entity " << entities[i].id << " and " << entities[j].id << std::endl;
+                std::cout << "Collision detected between Entity " << entities[i].id << " and Entity " << entities[j].id << std::endl;
             }
         }
-    }*/
+    }
+    */
 }
 
-void EntityManager::RenderEntities(SDL_Renderer* renderer, float& cameraX, float& cameraY, float& cameraW, float& cameraH, float deltaTime) {
+void EntityManager::RenderEntities(SDL_Renderer* renderer, float& cameraX, float& cameraY, float& cameraW, float& cameraH, float /*deltaTime*/) {
     for (auto& entity : entities) {
         if (spriteSheets.find(entity.unitType) != spriteSheets.end()) {
             SDL_Texture* texture = spriteSheets[entity.unitType];
             Animation& animation = animationManager.GetAnimation(entity.id);
-            
+
             if (animation.frames.empty()) {
                 continue;
-            }// Skip if no animation exists
+            }
 
-            // Get entity position relative to the camera
             int renderX = static_cast<int>(entity.position.x - cameraX);
             int renderY = static_cast<int>(entity.position.y - cameraY);
 
-            // Get sprite dimensions
             int spriteW = animation.spriteW;
             int spriteH = animation.spriteH;
 
-            // **Bounds Check: If entity is outside the camera bounds, skip rendering**
-            if (renderX + spriteW < 0 || renderX > cameraW || 
+            if (renderX + spriteW < 0 || renderX > cameraW ||
                 renderY + spriteH < 0 || renderY > cameraH) {
                 continue;
             }
 
-            // Determine flip direction
             bool isLeft = (entity.lastDirection == LEFT);
-            // Update animation and render
             animationManager.RenderEntity(renderer, texture, animation, renderX, renderY, isLeft);
         } else {
             std::cerr << "No sprite sheet found for entity: " << entity.id << std::endl;
         }
     }
 }
-

@@ -5,7 +5,6 @@
 #include "EntityManager.h"
 #include "Character.h"
 #include "MovementSystem.h"
-#include "MapTile.h" 
 #include "InputHandler.h"
 #include <vector>
 
@@ -26,10 +25,12 @@ struct Camera {
 
 bool dragging = false;
 int lastX, lastY;
+SDL_Renderer* gRenderer = nullptr; 
 
 void GameLoop(SDL_Window* window, SDL_Renderer* renderer, MapLoader& mapLoader, EntityManager& entityManager, InputHandler& inputHandler, UpdateFunc updateGame) {
     bool running = true;
     SDL_Event event;
+    gRenderer = renderer;
     camera.Initialize(window); 
     uint64_t lastCounter = SDL_GetTicks();
     while (running) {

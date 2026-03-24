@@ -29,3 +29,6 @@ this function just swaps animation set you want to use. like walk/attack/idle et
 
 # void RenderEntity(SDL_Renderer* renderer, SDL_Texture* spriteSheet, Animation* animation, int x, int y, bool flip);
 called automatically by gameloop through entitymanager. i'd advise reviewing what entitymanager is doing before manually calling this, since entitymanager is already calculating render position based on camera and world positions
+
+
+note to self, micro and macro pathfinding. go back to node based pathfinding, have 2 meshes, 1 high resolution and 1 super low resolution. 

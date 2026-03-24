@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 #include "../src/GameMain.h" // Rename this to whatever path you want to use for your main game driver
+#include "NavigationSystem.h"
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -25,6 +26,10 @@ int main() {
 
     // call your game driver here
     GameMain(window, renderer);
+
+    if (NavigationSystem::Instance().IsPathCacheDirty()) {
+        NavigationSystem::Instance().SavePathCacheToFile();
+    }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

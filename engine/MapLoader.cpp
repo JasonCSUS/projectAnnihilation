@@ -1,11 +1,11 @@
 #include "MapLoader.h"
-#include <fstream>
 #include <iostream>
 
 SDL_Texture* MapLoader::LoadTexture(const std::string& file, SDL_Renderer* renderer) {
     SDL_Surface* surface = SDL_LoadBMP(file.c_str());
     if (!surface) {
-        std::cerr << "Failed to load texture: " << file << " - " << SDL_GetError() << std::endl;
+        std::cerr << "Failed to load texture: " << file
+                  << " - " << SDL_GetError() << std::endl;
         return nullptr;
     }
 
@@ -13,36 +13,60 @@ SDL_Texture* MapLoader::LoadTexture(const std::string& file, SDL_Renderer* rende
     SDL_DestroySurface(surface);
 
     if (!texture) {
-        std::cerr << "Failed to create texture from: " << file << " - " << SDL_GetError() << std::endl;
+        std::cerr << "Failed to create texture from: " << file
+                  << " - " << SDL_GetError() << std::endl;
     }
 
     return texture;
 }
 
-void MapLoader::LoadMapTile(const std::string& textureFile, int worldX, int worldY, SDL_Renderer* renderer) {
-    SDL_Texture* texture = LoadTexture(textureFile, renderer);
-    if (!texture) {
-        std::cerr << "Failed to load texture: " << textureFile << std::endl;
-        return;
+bool MapLoader::LoadMap(const std::string& textureFile, SDL_Renderer* renderer) {
+    Clear();
+
+    SDL_Surface* surface = SDL_LoadBMP(textureFile.c_str());
+    if (!surface) {
+        std::cerr << "Failed to load map texture: " << textureFile
+                  << " - " << SDL_GetError() << std::endl;
+        return false;
     }
-    
-    MapTile newTile = { texture, worldX, worldY };
-    mapTiles.push_back(newTile);
+
+    mapWidth = surface->w;
+    mapHeight = surface->h;
+
+    mapTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface);
+
+    if (!mapTexture) {
+        std::cerr << "Failed to create map texture from: " << textureFile
+                  << " - " << SDL_GetError() << std::endl;
+        mapWidth = 0;
+        mapHeight = 0;
+        return false;
+    }
+
+    return true;
 }
 
 void MapLoader::Clear() {
-    mapTiles.clear();
+    mapTexture = nullptr;
+    mapWidth = 0;
+    mapHeight = 0;
 }
 
 void MapLoader::RenderMap(SDL_Renderer* renderer, float cameraX, float cameraY) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    for (const auto& tile : mapTiles) {
-        SDL_FRect dest = { tile.x - cameraX, tile.y - cameraY, 2000, 2000 };
-        if (tile.texture) {
-            SDL_RenderTexture(renderer, tile.texture, nullptr, &dest);
-        }
+    if (!mapTexture) {
+        return;
     }
+
+    SDL_FRect dest = {
+        -cameraX,
+        -cameraY,
+        static_cast<float>(mapWidth),
+        static_cast<float>(mapHeight)
+    };
+
+    SDL_RenderTexture(renderer, mapTexture, nullptr, &dest);
 }
-    

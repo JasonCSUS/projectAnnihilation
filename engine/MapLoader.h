@@ -1,29 +1,30 @@
 #ifndef MAPLOADER_H
 #define MAPLOADER_H
 
-#include <vector>
 #include <string>
-#include "MapTile.h"
-#include "NavMesh.h"
 #include <SDL3/SDL.h>
 
 class MapLoader {
 public:
-
-    // Loads a map tile from a texture file and places it at the specified world coordinates.
-    void LoadMapTile(const std::string& textureFile, int worldX, int worldY, SDL_Renderer* renderer);
-
-    // Renders all loaded map tiles.
-    void RenderMap(SDL_Renderer* renderer, float cameraX, float cameraY);
-
-    // Clears all loaded map tiles.
-    void Clear();
-
-    // Loads a texture from file.
+    // Loads a general texture from file.
     SDL_Texture* LoadTexture(const std::string& file, SDL_Renderer* renderer);
 
+    // Loads the single map texture used by the level.
+    bool LoadMap(const std::string& textureFile, SDL_Renderer* renderer);
+
+    // Renders the single loaded map.
+    void RenderMap(SDL_Renderer* renderer, float cameraX, float cameraY);
+
+    // Clears the loaded map texture reference/state.
+    void Clear();
+
+    int GetMapWidth() const { return mapWidth; }
+    int GetMapHeight() const { return mapHeight; }
+
 private:
-    std::vector<MapTile> mapTiles;
+    SDL_Texture* mapTexture = nullptr;
+    int mapWidth = 0;
+    int mapHeight = 0;
 };
 
 #endif // MAPLOADER_H
