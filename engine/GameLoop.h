@@ -2,17 +2,22 @@
 #define GAMELOOP_H
 
 #include <SDL3/SDL.h>
-#include <string>
 #include "EntityManager.h"
 #include "InputHandler.h"
 #include "MapLoader.h"
+#include "HUD.h"
 
-class EntityManager;
 typedef void (*UpdateFunc)(float);
+
 extern MapLoader mapLoader;
-extern SDL_Renderer* gRenderer; 
+extern SDL_Renderer* gRenderer;
 
-void GameLoop(SDL_Window* window, SDL_Renderer* renderer, MapLoader& mapLoader, EntityManager& entityManager, InputHandler& inputHandler, UpdateFunc updateGame);
+void GameLoop(SDL_Window* window,
+              SDL_Renderer* renderer,
+              MapLoader& mapLoader,
+              EntityManager& entityManager,
+              InputHandler& inputHandler,
+              UpdateFunc updateGame,
+              HUD& hud);
 
-void AddMapTile(const std::string& file, const std::string& collisionFile, int x, int y, SDL_Renderer* renderer);
 #endif

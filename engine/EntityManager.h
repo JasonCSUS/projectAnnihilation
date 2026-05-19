@@ -2,60 +2,83 @@
 #define ENTITYMANAGER_H
 
 #include <SDL3/SDL.h>
+#include <cstdint>
+#include <unordered_map>
 #include <vector>
-#include <map>
-#include <string>
-#include <future>
 
 #include "Character.h"
-#include "MovementSystem.h"
 #include "AnimationManager.h"
-#include "GameLoop.h"
-#include "MapLoader.h"
 #include "NavMesh.h"
 
+enum class NavMoveRequestType {
+    Strict,
+    Loose
+};
+
+struct QueuedMoveRequest {
+    bool active = false;
+    int targetX = -1;
+    int targetY = -1;
+    int clearanceBucket = 20;
+    NavMoveRequestType type = NavMoveRequestType::Strict;
+};
+
 struct Entity {
-    int id;
-    int controller;
-    int radius;
-    SDL_FRect position;
-    int unitType;
-    float speed;
-    float visionRange;
-    float attackRange;
-    int hp;
+    int id = 0;
+    int radius = 0;
+    SDL_FRect position{};
+    float speed = 0.0f;
     bool isDead = false;
-    Direction lastDirection = DOWN;
+    float movementAngleDegrees = 270.0f;
+    float velX = 0.0f;
+    float velY = 0.0f;
 
-    // MovementSystem consumes this.
+    // Generic render ordering only.
+    int renderPriority = 0;
+
+    // Path/nav data can remain engine-side.
     std::vector<Vec2> path;
-
-    // NavigationSystem-owned transitional navigation state.
-    int lastQueuedDestX = -1;
-    int lastQueuedDestY = -1;
-    std::future<std::vector<Vec2>> asyncPathFuture;
+    size_t pathIndex = 0;
     bool hasPendingPathUpdate = false;
-    float nextPathUpdateTime = 0.0f;
+
+    bool navAllowLooseReuse = false;
+    uint32_t navRequestGeneration = 0;
 
     bool navHasMoveTarget = false;
     int navTargetX = -1;
     int navTargetY = -1;
+    int navClearanceBucket = 20;
+    QueuedMoveRequest navQueuedMove{};
+    float nextPathUpdateTime = 0.0f;
 };
 
 class EntityManager {
 public:
-    void LoadTexture(int name, SDL_Texture* texture);
-    void AddEntity(int controller, int radius, const SDL_FRect& position, int unitType, Animation animation, float speed, float visionRange, float attackRange, int hp);
-    void RenderEntities(SDL_Renderer* renderer, float& cameraX, float& cameraY, float& cameraW, float& cameraH, float deltaTime);
-    void UpdateEntities(float deltaTime);
-    void RemoveDeadEntities();
-
     std::vector<Entity> entities;
 
+    Entity& AddEntity(int radius,
+                      const SDL_FRect& position,
+                      float speed);
+
+    void RemoveDeadEntities();
+
+    Entity* GetEntityById(int id);
+    const Entity* GetEntityById(int id) const;
+
+    void RenderEntities(SDL_Renderer* renderer,
+                        float& cameraX,
+                        float& cameraY,
+                        float& cameraW,
+                        float& cameraH,
+                        float deltaTime);
+
+    AnimationManager& GetAnimationManager() { return animationManager; }
+    const AnimationManager& GetAnimationManager() const { return animationManager; }
+
 private:
-    std::map<int, SDL_Texture*> spriteSheets;
-    MovementSystem movementSystem;
     AnimationManager animationManager;
+    std::unordered_map<int, size_t> entityIndex;
+    mutable std::vector<Entity*> renderScratch;
 };
 
 #endif

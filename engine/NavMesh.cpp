@@ -1,330 +1,172 @@
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 #include "NavMesh.h"
+#include "NavMeshInternal.h"
+#include "NavMeshBuckets.h"
+
+#include <algorithm>
+#include <cstring>
 #include <fstream>
 #include <iostream>
-#include <queue>
-#include <cmath>
-#include <limits>
-#include <algorithm>
-#include <SDL3/SDL.h>
+#include <unordered_set>
 
-//------------------------------------------------------------
-// Basic Utility Functions
-//------------------------------------------------------------
+using namespace navmesh_internal;
 
-static bool PointInPolygon(const Vec2& p, const std::vector<Vec2>& vertices) {
-    bool inside = false;
-    const int n = static_cast<int>(vertices.size());
+namespace {
+constexpr uint32_t PATH_CACHE_NAV_VERSION = 2;
 
-    for (int i = 0, j = n - 1; i < n; j = i++) {
-        if (((vertices[i].y > p.y) != (vertices[j].y > p.y)) &&
-            (p.x < (vertices[j].x - vertices[i].x) * (p.y - vertices[i].y) /
-                   static_cast<double>(vertices[j].y - vertices[i].y) + vertices[i].x)) {
-            inside = !inside;
+int QuantizeAgainstList(int radius, const std::vector<int>& buckets) {
+    if (radius <= 0) {
+        return 0;
+    }
+
+    if (buckets.empty()) {
+        if (radius <= 20) return 20;
+        if (radius <= 30) return 30;
+        return 40;
+    }
+
+    for (int bucket : buckets) {
+        if (radius <= bucket) {
+            return bucket;
         }
     }
-
-    return inside;
+    return buckets.back();
 }
 
-static Vec2 ComputeCentroid(const std::vector<Vec2>& vertices) {
-    long long sumX = 0;
-    long long sumY = 0;
-
-    for (const auto& v : vertices) {
-        sumX += v.x;
-        sumY += v.y;
-    }
-
-    const int count = static_cast<int>(vertices.size());
-    if (count == 0) {
-        return {0, 0};
-    }
-
-    return {
-        static_cast<int>(sumX / count),
-        static_cast<int>(sumY / count)
-    };
+void HashMixU64(uint64_t& h, uint64_t v) {
+    h ^= v + 0x9e3779b97f4a7c15ull + (h << 6) + (h >> 2);
 }
 
-static double Distance(const Vec2& a, const Vec2& b) {
-    const int dx = a.x - b.x;
-    const int dy = a.y - b.y;
-    return std::sqrt(static_cast<double>(dx * dx + dy * dy));
+void HashMixI32(uint64_t& h, int v) {
+    HashMixU64(h, static_cast<uint64_t>(static_cast<int64_t>(v)));
 }
 
-static double DistanceSquared(const Vec2& a, const Vec2& b) {
-    const double dx = static_cast<double>(a.x - b.x);
-    const double dy = static_cast<double>(a.y - b.y);
-    return dx * dx + dy * dy;
+void HashMixF32(uint64_t& h, float v) {
+    uint32_t bits = 0;
+    std::memcpy(&bits, &v, sizeof(bits));
+    HashMixU64(h, bits);
 }
 
-static int TriArea2(const Vec2& a, const Vec2& b, const Vec2& c) {
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+void HashMixString(uint64_t& h, const std::string& s) {
+    for (unsigned char c : s) {
+        HashMixU64(h, c);
+    }
+    HashMixU64(h, 0xff);
 }
 
-static Vec2 ClampPointToPolygon(const Vec2& pt, const std::vector<Vec2>& poly) {
-    double bestDist = std::numeric_limits<double>::max();
-    Vec2 bestPt = pt;
-
-    const size_t n = poly.size();
-    for (size_t i = 0; i < n; ++i) {
-        const Vec2 A = poly[i];
-        const Vec2 B = poly[(i + 1) % n];
-
-        const int abx = B.x - A.x;
-        const int aby = B.y - A.y;
-        const double abSq = static_cast<double>(abx * abx + aby * aby);
-        if (abSq == 0.0) {
-            continue;
-        }
-
-        double t = ((pt.x - A.x) * abx + (pt.y - A.y) * aby) / abSq;
-        t = std::max(0.0, std::min(1.0, t));
-
-        const Vec2 proj = {
-            A.x + static_cast<int>(std::lround(abx * t)),
-            A.y + static_cast<int>(std::lround(aby * t))
-        };
-
-        const double d = DistanceSquared(pt, proj);
-        if (d < bestDist) {
-            bestDist = d;
-            bestPt = proj;
-        }
-    }
-
-    return bestPt;
-}
-
-static bool PointInCorridor(const Vec2& p,
-                            const std::vector<int>& polyPath,
-                            const std::vector<NavPolygon>& polygons) {
-    for (int polyIndex : polyPath) {
-        if (polyIndex >= 0 &&
-            polyIndex < static_cast<int>(polygons.size()) &&
-            PointInPolygon(p, polygons[polyIndex].vertices)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-static bool IsSegmentInsideCorridorSampled(const Vec2& a,
-                                           const Vec2& b,
-                                           const std::vector<int>& polyPath,
-                                           const std::vector<NavPolygon>& polygons) {
-    if (!PointInCorridor(a, polyPath, polygons) || !PointInCorridor(b, polyPath, polygons)) {
-        return false;
-    }
-
-    const double dx = static_cast<double>(b.x - a.x);
-    const double dy = static_cast<double>(b.y - a.y);
-    const double length = std::sqrt(dx * dx + dy * dy);
-
-    if (length <= 1.0) {
-        return true;
-    }
-
-    const double stepSize = 8.0;
-    const int steps = std::max(1, static_cast<int>(std::ceil(length / stepSize)));
-
-    for (int i = 1; i < steps; ++i) {
-        const double t = static_cast<double>(i) / static_cast<double>(steps);
-        const Vec2 sample = {
-            static_cast<int>(std::lround(a.x + dx * t)),
-            static_cast<int>(std::lround(a.y + dy * t))
-        };
-
-        if (!PointInCorridor(sample, polyPath, polygons)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-static bool IsPathInsideCorridor(const std::vector<Vec2>& path,
-                                 const std::vector<int>& polyPath,
-                                 const std::vector<NavPolygon>& polygons) {
-    if (path.empty()) {
-        return false;
-    }
-
-    if (path.size() == 1) {
-        return PointInCorridor(path[0], polyPath, polygons);
-    }
-
-    for (size_t i = 0; i + 1 < path.size(); ++i) {
-        if (!IsSegmentInsideCorridorSampled(path[i], path[i + 1], polyPath, polygons)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-static Vec2 ClosestPointOnSegmentToPoint(const Vec2& segA, const Vec2& segB, const Vec2& p) {
-    const double abx = static_cast<double>(segB.x - segA.x);
-    const double aby = static_cast<double>(segB.y - segA.y);
-    const double abSq = abx * abx + aby * aby;
-
-    if (abSq <= 1e-9) {
-        return segA;
-    }
-
-    const double apx = static_cast<double>(p.x - segA.x);
-    const double apy = static_cast<double>(p.y - segA.y);
-    double t = (apx * abx + apy * aby) / abSq;
-    t = std::max(0.0, std::min(1.0, t));
-
-    return {
-        static_cast<int>(std::lround(segA.x + abx * t)),
-        static_cast<int>(std::lround(segA.y + aby * t))
-    };
-}
-
-static std::vector<Vec2> BuildSafePortalPath(const std::vector<Portal>& portals) {
-    std::vector<Vec2> safePath;
-    if (portals.empty()) {
-        return safePath;
-    }
-
-    safePath.reserve(portals.size() + 1);
-    safePath.push_back(portals.front().left);
-
-    for (size_t i = 1; i + 1 < portals.size(); ++i) {
-        const Portal& p = portals[i];
-        const Vec2 midpoint = {
-            (p.left.x + p.right.x) / 2,
-            (p.left.y + p.right.y) / 2
-        };
-
-        if (safePath.empty() ||
-            safePath.back().x != midpoint.x ||
-            safePath.back().y != midpoint.y) {
-            safePath.push_back(midpoint);
-        }
-    }
-
-    if (safePath.empty() ||
-        safePath.back().x != portals.back().left.x ||
-        safePath.back().y != portals.back().left.y) {
-        safePath.push_back(portals.back().left);
-    }
-
-    return safePath;
-}
-
-static std::vector<Portal> BuildPortals(const std::vector<int>& polyPath,
-                                        const std::vector<NavPolygon>& polygons,
-                                        const Vec2& start,
-                                        const Vec2& goal) {
-    std::vector<Portal> portals;
-    if (polyPath.empty()) {
-        return portals;
-    }
-
-    portals.reserve(polyPath.size() + 1);
-    portals.push_back({start, start});
-
-    for (size_t i = 0; i + 1 < polyPath.size(); ++i) {
-        const int currIdx = polyPath[i];
-        const int nextIdx = polyPath[i + 1];
-
-        if (currIdx < 0 || nextIdx < 0 ||
-            currIdx >= static_cast<int>(polygons.size()) ||
-            nextIdx >= static_cast<int>(polygons.size())) {
-            continue;
-        }
-
-        const NavPolygon& A = polygons[currIdx];
-        const NavPolygon& B = polygons[nextIdx];
-
-        bool found = false;
-        Vec2 sharedA{};
-        Vec2 sharedB{};
-
-        for (size_t j = 0; j < A.vertices.size(); ++j) {
-            const Vec2 a1 = A.vertices[j];
-            const Vec2 a2 = A.vertices[(j + 1) % A.vertices.size()];
-
-            bool inB1 = false;
-            bool inB2 = false;
-
-            for (const auto& v : B.vertices) {
-                if (v.x == a1.x && v.y == a1.y) inB1 = true;
-                if (v.x == a2.x && v.y == a2.y) inB2 = true;
-            }
-
-            if (inB1 && inB2) {
-                sharedA = a1;
-                sharedB = a2;
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            continue;
-        }
-
-        const Vec2 currCenter = ComputeCentroid(A.vertices);
-        const Vec2 nextCenter = ComputeCentroid(B.vertices);
-
-        if (TriArea2(currCenter, nextCenter, sharedA) > 0) {
-            portals.push_back({sharedB, sharedA});
-        } else {
-            portals.push_back({sharedA, sharedB});
-        }
-    }
-
-    portals.push_back({goal, goal});
-    return portals;
-}
-
-static std::vector<Vec2> BuildProjectedPortalPath(const std::vector<Portal>& portals,
-                                                  const Vec2& goal) {
-    std::vector<Vec2> path;
-    if (portals.empty()) {
-        return path;
-    }
-
-    path.reserve(portals.size() + 1);
-    path.push_back(portals.front().left); // start
-
-    // For each real portal, choose the point on that portal segment
-    // that is closest to the final goal.
-    for (size_t i = 1; i + 1 < portals.size(); ++i) {
-        const Portal& p = portals[i];
-        const Vec2 projected = ClosestPointOnSegmentToPoint(p.left, p.right, goal);
-
-        if (path.empty() ||
-            path.back().x != projected.x ||
-            path.back().y != projected.y) {
-            path.push_back(projected);
-        }
-    }
-
-    if (path.empty() ||
-        path.back().x != portals.back().left.x ||
-        path.back().y != portals.back().left.y) {
-        path.push_back(portals.back().left); // goal
-    }
-
-    return path;
-}
-
-//------------------------------------------------------------
-// NavMesh Public Functions
-//------------------------------------------------------------
+} // namespace
 
 NavMesh& NavMesh::Instance() {
     static NavMesh instance;
     return instance;
+}
+
+NavMesh::~NavMesh() {
+    StopBucketWorker();
+}
+
+uint32_t NavMesh::GetPathCacheNavVersion() {
+    return PATH_CACHE_NAV_VERSION;
+}
+
+uint64_t NavMesh::MakePortalKey(int polyA, int polyB) {
+    return (static_cast<uint64_t>(static_cast<uint32_t>(polyA)) << 32) |
+           static_cast<uint32_t>(polyB);
+}
+
+void NavMesh::EnsureBucketWorkerStarted() {
+    std::lock_guard<std::mutex> lock(bucketMutex);
+    if (bucketWorkerStarted) {
+        return;
+    }
+
+    stopBucketWorkerFlag = false;
+    bucketRebuildRequested = false;
+    bucketWorker = std::thread(&NavMeshBuckets::BucketWorkerLoop, std::ref(*this));
+    bucketWorkerStarted = true;
+}
+
+void NavMesh::StopBucketWorker() {
+    {
+        std::lock_guard<std::mutex> lock(bucketMutex);
+        if (!bucketWorkerStarted) {
+            return;
+        }
+        stopBucketWorkerFlag = true;
+        bucketRebuildRequested = true;
+    }
+
+    bucketCv.notify_all();
+
+    if (bucketWorker.joinable()) {
+        bucketWorker.join();
+    }
+
+    std::lock_guard<std::mutex> lock(bucketMutex);
+    bucketWorkerStarted = false;
+    stopBucketWorkerFlag = false;
+    bucketRebuildRequested = false;
+}
+
+void NavMesh::InitializeClearanceBuckets(const std::vector<int>& radii) {
+    std::vector<int> normalized;
+    normalized.reserve(radii.size());
+
+    for (int r : radii) {
+        if (r > 0) {
+            normalized.push_back(r);
+        }
+    }
+
+    std::sort(normalized.begin(), normalized.end());
+    normalized.erase(std::unique(normalized.begin(), normalized.end()), normalized.end());
+
+    {
+        std::lock_guard<std::mutex> lock(bucketMutex);
+        configuredBuckets = std::move(normalized);
+        readOnlyBuckets = configuredBuckets;
+    }
+
+    EnsureBucketWorkerStarted();
+    RebuildDynamicBlockerState();
+}
+
+void NavMesh::InitializeClearanceBuckets(int firstRadius, int bucketCount, int step) {
+    std::vector<int> radii;
+    radii.reserve(std::max(0, bucketCount));
+
+    int value = firstRadius;
+    for (int i = 0; i < bucketCount; ++i) {
+        if (value > 0) {
+            radii.push_back(value);
+        }
+        value += step;
+    }
+
+    InitializeClearanceBuckets(radii);
+}
+
+void NavMesh::QueueBucketRebuild() {
+    bool shouldNotify = false;
+    {
+        std::lock_guard<std::mutex> lock(bucketMutex);
+        if (configuredBuckets.empty()) {
+            return;
+        }
+
+        if (!bucketWorkerStarted) {
+            stopBucketWorkerFlag = false;
+            bucketRebuildRequested = false;
+            bucketWorker = std::thread(&NavMeshBuckets::BucketWorkerLoop, std::ref(*this));
+            bucketWorkerStarted = true;
+        }
+
+        bucketRebuildRequested = true;
+        shouldNotify = true;
+    }
+
+    if (shouldNotify) {
+        bucketCv.notify_one();
+    }
 }
 
 bool NavMesh::LoadFromFile(const std::string& filename) {
@@ -343,7 +185,10 @@ bool NavMesh::LoadFromFile(const std::string& filename) {
         return false;
     }
 
-    polygons.resize(numPolygons);
+    std::vector<NavPolygon> loadedPolys;
+    std::vector<Vec2> loadedCentroids;
+    loadedPolys.resize(numPolygons);
+    loadedCentroids.resize(numPolygons);
 
     for (int i = 0; i < numPolygons; ++i) {
         int vertexCount = 0;
@@ -367,26 +212,64 @@ bool NavMesh::LoadFromFile(const std::string& filename) {
         int neighborCount = 0;
         file.read(reinterpret_cast<char*>(&neighborCount), sizeof(int));
         poly.neighborIndices.resize(neighborCount);
-
         for (int j = 0; j < neighborCount; ++j) {
             file.read(reinterpret_cast<char*>(&poly.neighborIndices[j]), sizeof(int));
         }
 
-        polygons[i] = std::move(poly);
+        loadedCentroids[i] = ComputeCentroid(poly.vertices);
+        loadedPolys[i] = std::move(poly);
     }
+
+    {
+        std::lock_guard<std::mutex> lock(bucketMutex);
+        polygons = std::move(loadedPolys);
+        polygonCentroids = std::move(loadedCentroids);
+        polygonEnabled.assign(polygons.size(), 1);
+        activeDynamicWalls.clear();
+        exportedBlockerWalls.clear();
+        runtimeBlockers.clear();
+        hasExplicitWallEdges = false;
+        blockerRevision = 0;
+        bucketViewsSnapshot.reset();
+        bucketViewsRevision = 0;
+        BuildBoundaryWalls();
+        BuildSharedPortalMap();
+    }
+
+    RebuildDynamicBlockerState();
 
     std::cout << "Loaded navmesh with " << numPolygons << " polygons.\n";
     return true;
 }
 
 void NavMesh::Clear() {
-    polygons.clear();
+    {
+        std::lock_guard<std::mutex> lock(bucketMutex);
+        polygons.clear();
+        polygonCentroids.clear();
+        polygonEnabled.clear();
+        boundaryWalls.clear();
+        activeDynamicWalls.clear();
+        runtimeBlockers.clear();
+        exportedBlockerWalls.clear();
+        hasExplicitWallEdges = false;
+        blockerRevision = 0;
+        bucketViewsSnapshot.reset();
+        bucketViewsRevision = 0;
+    }
+    wallGridWalls.clear();
+    wallGridCells.clear();
+    sharedPortals.clear();
 }
 
 void NavMesh::DebugRender(SDL_Renderer* renderer, float cameraX, float cameraY) const {
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    for (size_t polyIndex = 0; polyIndex < polygons.size(); ++polyIndex) {
+        const auto& poly = polygons[polyIndex];
+        const bool enabled = IsPolygonEnabled(static_cast<int>(polyIndex));
 
-    for (const auto& poly : polygons) {
+        if (enabled) SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        else SDL_SetRenderDrawColor(renderer, 120, 40, 40, 255);
+
         const size_t numVerts = poly.vertices.size();
         for (size_t i = 0; i < numVerts; ++i) {
             const Vec2& a = poly.vertices[i];
@@ -398,162 +281,119 @@ void NavMesh::DebugRender(SDL_Renderer* renderer, float cameraX, float cameraY) 
                            static_cast<float>(b.y - cameraY));
         }
     }
+
+    SDL_SetRenderDrawColor(renderer, 255, 80, 80, 255);
+    for (const auto& wall : boundaryWalls) {
+        SDL_RenderLine(renderer,
+                       static_cast<float>(wall.a.x - cameraX),
+                       static_cast<float>(wall.a.y - cameraY),
+                       static_cast<float>(wall.b.x - cameraX),
+                       static_cast<float>(wall.b.y - cameraY));
+    }
+
+    SDL_SetRenderDrawColor(renderer, 255, 180, 40, 255);
+    for (const auto& wall : activeDynamicWalls) {
+        SDL_RenderLine(renderer,
+                       static_cast<float>(wall.a.x - cameraX),
+                       static_cast<float>(wall.a.y - cameraY),
+                       static_cast<float>(wall.b.x - cameraX),
+                       static_cast<float>(wall.b.y - cameraY));
+    }
 }
 
-std::vector<int> NavMesh::FindPath(int startIndex, int goalIndex) {
-    std::vector<int> result;
+int NavMesh::QuantizeClearanceBucket(int radius) {
+    // readOnlyBuckets is written once at startup (before workers start) and
+    // then only read — no lock needed.
+    return QuantizeAgainstList(radius, Instance().readOnlyBuckets);
+}
 
-    if (startIndex < 0 || goalIndex < 0 ||
-        startIndex >= static_cast<int>(polygons.size()) ||
-        goalIndex >= static_cast<int>(polygons.size())) {
-        return result;
+const NavMesh::BucketView* NavMesh::GetBucketView(
+    int clearanceBucket,
+    std::shared_ptr<const std::vector<BucketView>>& outSnapshot) const {
+    return NavMeshBuckets::GetBucketView(*this, clearanceBucket, outSnapshot);
+}
+
+Vec2 NavMesh::GetPolygonCentroid(int polyIndex) const {
+    std::lock_guard<std::mutex> lock(bucketMutex);
+    if (polyIndex < 0 || polyIndex >= static_cast<int>(polygonCentroids.size())) {
+        return {0, 0};
     }
+    return polygonCentroids[polyIndex];
+}
 
-    if (startIndex == goalIndex) {
-        result.push_back(startIndex);
-        return result;
-    }
+bool NavMesh::HasLineOfSight(const Vec2& a, const Vec2& b, int clearanceBucket) const {
+    return IsSegmentClearOfWalls(a, b, clearanceBucket);
+}
 
-    struct Node {
-        int polyIndex;
-        double cost;
-        double priority;
-    };
 
-    auto cmp = [](const Node& a, const Node& b) {
-        return a.priority > b.priority;
-    };
+const NavPolygon* NavMesh::GetPolygon(int polyIndex) const {
+    if (polyIndex < 0 || polyIndex >= static_cast<int>(polygons.size())) return nullptr;
+    return &polygons[polyIndex];
+}
 
-    std::priority_queue<Node, std::vector<Node>, decltype(cmp)> frontier(cmp);
-    std::vector<double> costSoFar(polygons.size(), std::numeric_limits<double>::max());
-    std::vector<int> cameFrom(polygons.size(), -1);
-    std::vector<Vec2> centroids(polygons.size());
+bool NavMesh::GetSharedPortal(int polyAIndex, int polyBIndex, Vec2& outA, Vec2& outB) const {
+    return TryGetSharedPortal(polyAIndex, polyBIndex, outA, outB);
+}
 
-    for (size_t i = 0; i < polygons.size(); ++i) {
-        centroids[i] = ComputeCentroid(polygons[i].vertices);
-    }
+uint64_t NavMesh::GetPathCacheMapVersion() const {
+    std::lock_guard<std::mutex> lock(bucketMutex);
 
-    auto heuristic = [&](int idx) -> double {
-        return Distance(centroids[idx], centroids[goalIndex]);
-    };
+    uint64_t h = 1469598103934665603ull;
 
-    frontier.push({startIndex, 0.0, heuristic(startIndex)});
-    costSoFar[startIndex] = 0.0;
-
-    while (!frontier.empty()) {
-        const Node current = frontier.top();
-        frontier.pop();
-
-        if (current.cost > costSoFar[current.polyIndex]) {
-            continue;
+    HashMixU64(h, 0x4e41564d45534831ull);
+    HashMixU64(h, polygons.size());
+    for (const auto& poly : polygons) {
+        HashMixU64(h, poly.vertices.size());
+        for (const auto& v : poly.vertices) {
+            HashMixI32(h, v.x);
+            HashMixI32(h, v.y);
         }
-
-        if (current.polyIndex == goalIndex) {
-            int cur = goalIndex;
-            while (cur != -1) {
-                result.push_back(cur);
-                cur = cameFrom[cur];
-            }
-            std::reverse(result.begin(), result.end());
-            return result;
-        }
-
-        for (int neighbor : polygons[current.polyIndex].neighborIndices) {
-            if (neighbor < 0 || neighbor >= static_cast<int>(polygons.size())) {
-                continue;
-            }
-
-            const double newCost =
-                costSoFar[current.polyIndex] +
-                Distance(centroids[current.polyIndex], centroids[neighbor]);
-
-            if (newCost < costSoFar[neighbor]) {
-                costSoFar[neighbor] = newCost;
-                cameFrom[neighbor] = current.polyIndex;
-                frontier.push({neighbor, newCost, newCost + heuristic(neighbor)});
-            }
+        HashMixU64(h, poly.neighborIndices.size());
+        for (int n : poly.neighborIndices) {
+            HashMixI32(h, n);
         }
     }
 
-    return result;
-}
-
-std::vector<Vec2> NavMesh::FunnelPath(const std::vector<int>& polyPath,
-                                      const Vec2& startPt,
-                                      const Vec2& goalPt) {
-    if (polyPath.empty() || polygons.empty()) {
-        return {};
+    HashMixU64(h, configuredBuckets.size());
+    for (int b : configuredBuckets) {
+        HashMixI32(h, b);
     }
 
-    const Vec2 clampedStart = ClampToNavMesh(startPt);
-    const Vec2 clampedGoal = ClampToNavMesh(goalPt);
-
-    const std::vector<Portal> portals = BuildPortals(polyPath, polygons, clampedStart, clampedGoal);
-    if (portals.empty()) {
-        return {};
-    }
-
-    std::vector<Vec2> projectedPortalPath = BuildProjectedPortalPath(portals, clampedGoal);
-    if (IsPathInsideCorridor(projectedPortalPath, polyPath, polygons)) {
-        return projectedPortalPath;
-    }
-
-    std::cout << "NavMesh: projected portal path left corridor, falling back to midpoint portal path.\n";
-    std::vector<Vec2> safePath = BuildSafePortalPath(portals);
-
-    if (IsPathInsideCorridor(safePath, polyPath, polygons)) {
-        return safePath;
-    }
-
-    std::cout << "NavMesh: midpoint portal path also failed corridor validation.\n";
-    return {};
-}
-
-//------------------------------------------------------------
-// Internal Helper Functions
-//------------------------------------------------------------
-
-int NavMesh::GetPolygonIndexAt(int x, int y) const {
-    if (polygons.empty()) {
-        return -1;
-    }
-
-    const Vec2 point = {x, y};
-
-    for (size_t i = 0; i < polygons.size(); ++i) {
-        if (PointInPolygon(point, polygons[i].vertices)) {
-            return static_cast<int>(i);
+    HashMixU64(h, runtimeBlockers.size());
+    for (const auto& blocker : runtimeBlockers) {
+        HashMixString(h, blocker.label);
+        HashMixString(h, blocker.toggleId);
+        HashMixString(h, blocker.kind);
+        HashMixI32(h, blocker.enabled ? 1 : 0);
+        HashMixF32(h, blocker.x);
+        HashMixF32(h, blocker.y);
+        HashMixF32(h, blocker.w);
+        HashMixF32(h, blocker.h);
+        HashMixU64(h, blocker.cellIds.size());
+        for (int id : blocker.cellIds) {
+            HashMixI32(h, id);
         }
     }
 
-    double bestDist = std::numeric_limits<double>::max();
-    int bestIndex = -1;
-
-    for (size_t i = 0; i < polygons.size(); ++i) {
-        const Vec2 centroid = ComputeCentroid(polygons[i].vertices);
-        const double d = DistanceSquared(point, centroid);
-        if (d < bestDist) {
-            bestDist = d;
-            bestIndex = static_cast<int>(i);
-        }
+    HashMixU64(h, boundaryWalls.size());
+    for (const auto& wall : boundaryWalls) {
+        HashMixI32(h, wall.a.x); HashMixI32(h, wall.a.y);
+        HashMixI32(h, wall.b.x); HashMixI32(h, wall.b.y);
+        HashMixI32(h, wall.ownerPoly);
+        HashMixI32(h, wall.fromRuntimeBlocker ? 1 : 0);
+        HashMixString(h, wall.toggleId);
     }
 
-    return bestIndex;
+    HashMixU64(h, exportedBlockerWalls.size());
+    for (const auto& wall : exportedBlockerWalls) {
+        HashMixI32(h, wall.a.x); HashMixI32(h, wall.a.y);
+        HashMixI32(h, wall.b.x); HashMixI32(h, wall.b.y);
+        HashMixI32(h, wall.ownerPoly);
+        HashMixI32(h, wall.fromRuntimeBlocker ? 1 : 0);
+        HashMixString(h, wall.toggleId);
+    }
+
+    HashMixI32(h, hasExplicitWallEdges ? 1 : 0);
+    return h;
 }
 
-Vec2 NavMesh::ClampToNavMesh(const Vec2& pt) {
-    if (polygons.empty()) {
-        return pt;
-    }
-
-    const int pIdx = GetPolygonIndexAt(pt.x, pt.y);
-    if (pIdx < 0 || pIdx >= static_cast<int>(polygons.size())) {
-        return pt;
-    }
-
-    if (PointInPolygon(pt, polygons[pIdx].vertices)) {
-        return pt;
-    }
-
-    return ClampPointToPolygon(pt, polygons[pIdx].vertices);
-}

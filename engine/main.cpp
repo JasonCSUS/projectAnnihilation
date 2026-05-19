@@ -4,7 +4,7 @@
 #include "NavigationSystem.h"
 
 int main() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cerr << "SDL failed to initialize: " << SDL_GetError() << std::endl;
         return 1;
     }

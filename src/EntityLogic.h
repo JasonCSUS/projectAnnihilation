@@ -3,6 +3,10 @@
 
 #include "../engine/EntityManager.h"
 
-void UpdateEnemyAI(EntityManager& entityManager);
+class GameEntityManager;
+
+void UpdateEnemyAI(EntityManager& entityManager,
+                   GameEntityManager& gameEntityManager,
+                   float deltaTime);
 
 #endif

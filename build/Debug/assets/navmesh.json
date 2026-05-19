@@ -7,6 +7,7 @@
   "nav_items": [
     {
       "id": 3,
+      "runtime_id": "room_0__3",
       "label": "room_0",
       "category": "nav",
       "kind": "circle",
@@ -22,6 +23,7 @@
     },
     {
       "id": 5,
+      "runtime_id": "corridor_1",
       "label": "corridor_1",
       "category": "nav",
       "kind": "rect",
@@ -37,21 +39,23 @@
     },
     {
       "id": 7,
+      "runtime_id": "room_1__7",
       "label": "room_1",
       "category": "nav",
       "kind": "circle",
       "x": 1080.0,
-      "y": 120.0,
-      "w": 560.0,
-      "h": 560.0,
+      "y": 60.0,
+      "w": 660.0,
+      "h": 660.0,
       "center": [
-        1360.0,
-        400.0
+        1410.0,
+        390.0
       ],
       "role": "room"
     },
     {
       "id": 9,
+      "runtime_id": "corridor_2",
       "label": "corridor_2",
       "category": "nav",
       "kind": "rect",
@@ -67,6 +71,7 @@
     },
     {
       "id": 11,
+      "runtime_id": "room_2__11",
       "label": "room_2",
       "category": "nav",
       "kind": "circle",
@@ -79,11 +84,77 @@
         1250.0
       ],
       "role": "room"
+    },
+    {
+      "id": 21,
+      "runtime_id": "spawner__21",
+      "label": "spawner",
+      "category": "nav",
+      "kind": "circle",
+      "x": 1220.0,
+      "y": 180.0,
+      "w": 120.0,
+      "h": 120.0,
+      "center": [
+        1280.0,
+        240.0
+      ],
+      "role": "blocked"
+    },
+    {
+      "id": 22,
+      "runtime_id": "spawner__22",
+      "label": "spawner",
+      "category": "nav",
+      "kind": "circle",
+      "x": 1420.0,
+      "y": 320.0,
+      "w": 120.0,
+      "h": 120.0,
+      "center": [
+        1480.0,
+        380.0
+      ],
+      "role": "blocked"
+    },
+    {
+      "id": 24,
+      "runtime_id": "spawner__24",
+      "label": "spawner",
+      "category": "nav",
+      "kind": "circle",
+      "x": 1240.0,
+      "y": 460.0,
+      "w": 120.0,
+      "h": 120.0,
+      "center": [
+        1300.0,
+        520.0
+      ],
+      "role": "blocked"
+    },
+    {
+      "id": 25,
+      "runtime_id": "blockade_1",
+      "label": "blockade_1",
+      "category": "nav",
+      "kind": "rect",
+      "x": 1280.0,
+      "y": 660.0,
+      "w": 180.0,
+      "h": 60.0,
+      "center": [
+        1370.0,
+        690.0
+      ],
+      "role": "blocked"
     }
   ],
   "regions": [
     {
       "label": "room_0",
+      "runtime_id": "room_0__3",
+      "source_item_id": 3,
       "role": "room",
       "kind": "circle",
       "center": [
@@ -92,10 +163,18 @@
       ],
       "neighbors": [
         "corridor_1"
+      ],
+      "neighbor_ids": [
+        "corridor_1"
+      ],
+      "polygon_ids": [
+        0
       ]
     },
     {
       "label": "corridor_1",
+      "runtime_id": "corridor_1",
+      "source_item_id": 5,
       "role": "corridor",
       "kind": "rect",
       "center": [
@@ -105,23 +184,58 @@
       "neighbors": [
         "room_0",
         "room_1"
+      ],
+      "neighbor_ids": [
+        "room_0__3",
+        "room_1__7"
+      ],
+      "polygon_ids": [
+        4
       ]
     },
     {
       "label": "room_1",
+      "runtime_id": "room_1__7",
+      "source_item_id": 7,
       "role": "room",
       "kind": "circle",
       "center": [
-        1360.0,
-        427.312645082258
+        1410.0,
+        422.1899031326612
       ],
       "neighbors": [
         "corridor_1",
         "corridor_2"
+      ],
+      "neighbor_ids": [
+        "corridor_1",
+        "corridor_2"
+      ],
+      "polygon_ids": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
       ]
     },
     {
       "label": "corridor_2",
+      "runtime_id": "corridor_2",
+      "source_item_id": 9,
       "role": "corridor",
       "kind": "rect",
       "center": [
@@ -131,10 +245,19 @@
       "neighbors": [
         "room_1",
         "room_2"
+      ],
+      "neighbor_ids": [
+        "room_1__7",
+        "room_2__11"
+      ],
+      "polygon_ids": [
+        21
       ]
     },
     {
       "label": "room_2",
+      "runtime_id": "room_2__11",
+      "source_item_id": 11,
       "role": "room",
       "kind": "circle",
       "center": [
@@ -143,6 +266,12 @@
       ],
       "neighbors": [
         "corridor_2"
+      ],
+      "neighbor_ids": [
+        "corridor_2"
+      ],
+      "polygon_ids": [
+        20
       ]
     }
   ],
@@ -150,54 +279,6 @@
     {
       "id": 0,
       "vertices": [
-        [
-          476.29,
-          654.88
-        ],
-        [
-          414.38,
-          673.66
-        ],
-        [
-          350.0,
-          680.0
-        ],
-        [
-          285.62,
-          673.66
-        ],
-        [
-          223.71,
-          654.88
-        ],
-        [
-          166.66,
-          624.38
-        ],
-        [
-          116.65,
-          583.35
-        ],
-        [
-          75.62,
-          533.34
-        ],
-        [
-          45.12,
-          476.29
-        ],
-        [
-          26.34,
-          414.38
-        ],
-        [
-          20.0,
-          350.0
-        ],
-        [
-          26.34,
-          285.62
-        ],
         [
           45.12,
           223.71
@@ -269,26 +350,838 @@
         [
           533.34,
           624.38
+        ],
+        [
+          476.29,
+          654.88
+        ],
+        [
+          414.38,
+          673.66
+        ],
+        [
+          350.0,
+          680.0
+        ],
+        [
+          285.62,
+          673.66
+        ],
+        [
+          223.71,
+          654.88
+        ],
+        [
+          166.66,
+          624.38
+        ],
+        [
+          116.65,
+          583.35
+        ],
+        [
+          75.62,
+          533.34
+        ],
+        [
+          45.12,
+          476.29
+        ],
+        [
+          26.34,
+          414.38
+        ],
+        [
+          20.0,
+          350.0
+        ],
+        [
+          26.34,
+          285.62
         ]
       ],
       "neighbors": [
-        3
+        4
       ],
       "source_region_labels": [
         "room_0"
-      ]
+      ],
+      "source_region_ids": [
+        "room_0__3"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
     },
     {
       "id": 1,
       "vertices": [
         [
-          1079.08,
-          1440.92
+          1643.35,
+          623.35
         ],
         [
-          1020.55,
-          1353.32
+          1593.34,
+          664.38
         ],
+        [
+          1536.29,
+          694.88
+        ],
+        [
+          1460.0,
+          715.08
+        ],
+        [
+          1460.0,
+          660.0
+        ],
+        [
+          1491.71,
+          438.85
+        ],
+        [
+          1529.89,
+          413.33
+        ],
+        [
+          1740.0,
+          390.0
+        ],
+        [
+          1733.66,
+          454.38
+        ],
+        [
+          1714.88,
+          516.29
+        ],
+        [
+          1684.38,
+          573.34
+        ]
+      ],
+      "neighbors": [
+        2,
+        7,
+        23,
+        25
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 2,
+      "vertices": [
+        [
+          1529.89,
+          413.33
+        ],
+        [
+          1538.85,
+          368.29
+        ],
+        [
+          1714.88,
+          263.71
+        ],
+        [
+          1733.66,
+          325.62
+        ],
+        [
+          1740.0,
+          390.0
+        ]
+      ],
+      "neighbors": [
+        1,
+        8,
+        23
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 3,
+      "vertices": [
+        [
+          1643.35,
+          156.65
+        ],
+        [
+          1684.38,
+          206.66
+        ],
+        [
+          1714.88,
+          263.71
+        ],
+        [
+          1513.33,
+          330.11
+        ],
+        [
+          1468.29,
+          321.15
+        ],
+        [
+          1338.85,
+          228.29
+        ],
+        [
+          1313.33,
+          190.11
+        ],
+        [
+          1283.71,
+          85.12
+        ],
+        [
+          1345.62,
+          66.34
+        ],
+        [
+          1410.0,
+          60.0
+        ],
+        [
+          1474.38,
+          66.34
+        ],
+        [
+          1536.29,
+          85.12
+        ],
+        [
+          1593.34,
+          115.62
+        ]
+      ],
+      "neighbors": [
+        8,
+        9,
+        10,
+        22,
+        23
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 4,
+      "vertices": [
+        [
+          1100.18,
+          280.0
+        ],
+        [
+          1246.67,
+          289.89
+        ],
+        [
+          1084.92,
+          440.0
+        ],
+        [
+          665.89,
+          440.0
+        ],
+        [
+          671.95,
+          280.0
+        ]
+      ],
+      "neighbors": [
+        0,
+        11,
+        17
+      ],
+      "source_region_labels": [
+        "corridor_1"
+      ],
+      "source_region_ids": [
+        "corridor_1"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 5,
+      "vertices": [
+        [
+          1280.0,
+          692.89
+        ],
+        [
+          1226.66,
+          664.38
+        ],
+        [
+          1176.65,
+          623.35
+        ],
+        [
+          1135.62,
+          573.34
+        ],
+        [
+          1105.12,
+          516.29
+        ],
+        [
+          1241.15,
+          531.71
+        ],
+        [
+          1266.67,
+          569.89
+        ],
+        [
+          1280.0,
+          660.0
+        ]
+      ],
+      "neighbors": [
+        11,
+        12,
+        24,
+        25
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 6,
+      "vertices": [
+        [
+          1311.71,
+          578.85
+        ],
+        [
+          1349.89,
+          553.33
+        ],
+        [
+          1460.0,
+          660.0
+        ],
+        [
+          1280.0,
+          660.0
+        ]
+      ],
+      "neighbors": [
+        7,
+        12,
+        24,
+        25
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 7,
+      "vertices": [
+        [
+          1349.89,
+          553.33
+        ],
+        [
+          1358.85,
+          508.29
+        ],
+        [
+          1446.67,
+          429.89
+        ],
+        [
+          1491.71,
+          438.85
+        ],
+        [
+          1460.0,
+          660.0
+        ]
+      ],
+      "neighbors": [
+        1,
+        6,
+        13,
+        23,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 8,
+      "vertices": [
+        [
+          1513.33,
+          330.11
+        ],
+        [
+          1714.88,
+          263.71
+        ],
+        [
+          1538.85,
+          368.29
+        ]
+      ],
+      "neighbors": [
+        2,
+        3,
+        23
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 9,
+      "vertices": [
+        [
+          1329.89,
+          273.33
+        ],
+        [
+          1338.85,
+          228.29
+        ],
+        [
+          1468.29,
+          321.15
+        ],
+        [
+          1430.11,
+          346.67
+        ]
+      ],
+      "neighbors": [
+        3,
+        14,
+        22,
+        23
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 10,
+      "vertices": [
+        [
+          1313.33,
+          190.11
+        ],
+        [
+          1268.29,
+          181.15
+        ],
+        [
+          1226.66,
+          115.62
+        ],
+        [
+          1283.71,
+          85.12
+        ]
+      ],
+      "neighbors": [
+        3,
+        16,
+        22
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 11,
+      "vertices": [
+        [
+          1246.67,
+          289.89
+        ],
+        [
+          1250.11,
+          486.67
+        ],
+        [
+          1241.15,
+          531.71
+        ],
+        [
+          1105.12,
+          516.29
+        ],
+        [
+          1084.92,
+          440.0
+        ]
+      ],
+      "neighbors": [
+        4,
+        5,
+        18,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 12,
+      "vertices": [
+        [
+          1266.67,
+          569.89
+        ],
+        [
+          1311.71,
+          578.85
+        ],
+        [
+          1280.0,
+          660.0
+        ]
+      ],
+      "neighbors": [
+        5,
+        6,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 13,
+      "vertices": [
+        [
+          1446.67,
+          429.89
+        ],
+        [
+          1358.85,
+          508.29
+        ],
+        [
+          1333.33,
+          470.11
+        ],
+        [
+          1291.71,
+          298.85
+        ],
+        [
+          1421.15,
+          391.71
+        ]
+      ],
+      "neighbors": [
+        7,
+        14,
+        19,
+        23,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 14,
+      "vertices": [
+        [
+          1421.15,
+          391.71
+        ],
+        [
+          1291.71,
+          298.85
+        ],
+        [
+          1329.89,
+          273.33
+        ],
+        [
+          1430.11,
+          346.67
+        ]
+      ],
+      "neighbors": [
+        9,
+        13,
+        22,
+        23
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 15,
+      "vertices": [
+        [
+          1230.11,
+          206.67
+        ],
+        [
+          1221.15,
+          251.71
+        ],
+        [
+          1100.18,
+          280.0
+        ],
+        [
+          1135.62,
+          206.66
+        ],
+        [
+          1176.65,
+          156.65
+        ],
+        [
+          1226.66,
+          115.62
+        ]
+      ],
+      "neighbors": [
+        16,
+        17,
+        22
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 16,
+      "vertices": [
+        [
+          1226.66,
+          115.62
+        ],
+        [
+          1268.29,
+          181.15
+        ],
+        [
+          1230.11,
+          206.67
+        ]
+      ],
+      "neighbors": [
+        10,
+        15,
+        22
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 17,
+      "vertices": [
+        [
+          1221.15,
+          251.71
+        ],
+        [
+          1246.67,
+          289.89
+        ],
+        [
+          1100.18,
+          280.0
+        ]
+      ],
+      "neighbors": [
+        4,
+        15,
+        22
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 18,
+      "vertices": [
+        [
+          1288.29,
+          461.15
+        ],
+        [
+          1250.11,
+          486.67
+        ],
+        [
+          1246.67,
+          289.89
+        ],
+        [
+          1291.71,
+          298.85
+        ]
+      ],
+      "neighbors": [
+        11,
+        19,
+        22,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 19,
+      "vertices": [
+        [
+          1288.29,
+          461.15
+        ],
+        [
+          1291.71,
+          298.85
+        ],
+        [
+          1333.33,
+          470.11
+        ]
+      ],
+      "neighbors": [
+        13,
+        18,
+        24
+      ],
+      "source_region_labels": [
+        "room_1"
+      ],
+      "source_region_ids": [
+        "room_1__7"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 20,
+      "vertices": [
         [
           1000.0,
           1250.0
@@ -296,10 +1189,6 @@
         [
           1020.55,
           1146.68
-        ],
-        [
-          1045.5,
-          1100.0
         ],
         [
           1079.08,
@@ -330,12 +1219,12 @@
           1250.0
         ],
         [
-          1534.81,
-          1302.67
+          1519.45,
+          1353.32
         ],
         [
-          1494.5,
-          1400.0
+          1460.92,
+          1440.92
         ],
         [
           1420.0,
@@ -352,164 +1241,1298 @@
         [
           1166.68,
           1499.45
+        ],
+        [
+          1079.08,
+          1440.92
+        ],
+        [
+          1020.55,
+          1353.32
         ]
       ],
       "neighbors": [
-        4
+        21
       ],
       "source_region_labels": [
         "room_2"
-      ]
+      ],
+      "source_region_ids": [
+        "room_2__11"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
     },
     {
-      "id": 2,
+      "id": 21,
       "vertices": [
-        [
-          1305.37,
-          125.38
-        ],
-        [
-          1360.0,
-          120.0
-        ],
-        [
-          1414.63,
-          125.38
-        ],
-        [
-          1515.56,
-          167.19
-        ],
-        [
-          1592.81,
-          244.44
-        ],
-        [
-          1634.62,
-          345.37
-        ],
-        [
-          1640.0,
-          400.0
-        ],
-        [
-          1618.69,
-          507.15
-        ],
-        [
-          1557.99,
-          597.99
-        ],
-        [
-          1515.56,
-          632.81
-        ],
-        [
-          1460.0,
-          660.86
-        ],
-        [
-          1280.0,
-          666.92
-        ],
-        [
-          1204.44,
-          632.81
-        ],
-        [
-          1162.01,
-          597.99
-        ],
-        [
-          1101.31,
-          507.15
-        ],
-        [
-          1083.94,
-          440.0
-        ],
-        [
-          1108.18,
-          280.0
-        ],
-        [
-          1162.01,
-          202.01
-        ],
-        [
-          1204.44,
-          167.19
-        ]
-      ],
-      "neighbors": [
-        3,
-        4
-      ],
-      "source_region_labels": [
-        "room_1"
-      ]
-    },
-    {
-      "id": 3,
-      "vertices": [
-        [
-          665.89,
-          440.0
-        ],
-        [
-          671.95,
-          280.0
-        ],
-        [
-          1108.18,
-          280.0
-        ],
-        [
-          1083.94,
-          440.0
-        ]
-      ],
-      "neighbors": [
-        0,
-        2
-      ],
-      "source_region_labels": [
-        "corridor_1"
-      ]
-    },
-    {
-      "id": 4,
-      "vertices": [
-        [
-          1460.0,
-          660.86
-        ],
-        [
-          1460.0,
-          1058.33
-        ],
         [
           1280.0,
           980.98
         ],
         [
           1280.0,
-          666.92
+          720.0
+        ],
+        [
+          1460.0,
+          720.0
+        ],
+        [
+          1460.0,
+          1058.33
+        ]
+      ],
+      "neighbors": [
+        20,
+        25
+      ],
+      "source_region_labels": [
+        "corridor_2"
+      ],
+      "source_region_ids": [
+        "corridor_2"
+      ],
+      "blocked": false,
+      "blocked_by_labels": [],
+      "blocked_by_ids": []
+    },
+    {
+      "id": 22,
+      "vertices": [
+        [
+          1246.67,
+          289.89
+        ],
+        [
+          1221.15,
+          251.71
+        ],
+        [
+          1230.11,
+          206.67
+        ],
+        [
+          1268.29,
+          181.15
+        ],
+        [
+          1313.33,
+          190.11
+        ],
+        [
+          1338.85,
+          228.29
+        ],
+        [
+          1329.89,
+          273.33
+        ],
+        [
+          1291.71,
+          298.85
+        ]
+      ],
+      "neighbors": [
+        3,
+        9,
+        10,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "source_region_labels": [
+        "room_1",
+        "spawner"
+      ],
+      "source_region_ids": [
+        "room_1__7",
+        "spawner__21"
+      ],
+      "blocked": true,
+      "blocked_by_labels": [
+        "spawner"
+      ],
+      "blocked_by_ids": [
+        "spawner__21"
+      ]
+    },
+    {
+      "id": 23,
+      "vertices": [
+        [
+          1421.15,
+          391.71
+        ],
+        [
+          1430.11,
+          346.67
+        ],
+        [
+          1468.29,
+          321.15
+        ],
+        [
+          1513.33,
+          330.11
+        ],
+        [
+          1538.85,
+          368.29
+        ],
+        [
+          1529.89,
+          413.33
+        ],
+        [
+          1491.71,
+          438.85
+        ],
+        [
+          1446.67,
+          429.89
         ]
       ],
       "neighbors": [
         1,
-        2
+        2,
+        3,
+        7,
+        8,
+        9,
+        13,
+        14
       ],
       "source_region_labels": [
-        "corridor_2"
+        "room_1",
+        "spawner"
+      ],
+      "source_region_ids": [
+        "room_1__7",
+        "spawner__22"
+      ],
+      "blocked": true,
+      "blocked_by_labels": [
+        "spawner"
+      ],
+      "blocked_by_ids": [
+        "spawner__22"
       ]
+    },
+    {
+      "id": 24,
+      "vertices": [
+        [
+          1311.71,
+          578.85
+        ],
+        [
+          1266.67,
+          569.89
+        ],
+        [
+          1241.15,
+          531.71
+        ],
+        [
+          1250.11,
+          486.67
+        ],
+        [
+          1288.29,
+          461.15
+        ],
+        [
+          1333.33,
+          470.11
+        ],
+        [
+          1358.85,
+          508.29
+        ],
+        [
+          1349.89,
+          553.33
+        ]
+      ],
+      "neighbors": [
+        5,
+        6,
+        7,
+        11,
+        12,
+        13,
+        18,
+        19
+      ],
+      "source_region_labels": [
+        "room_1",
+        "spawner"
+      ],
+      "source_region_ids": [
+        "room_1__7",
+        "spawner__24"
+      ],
+      "blocked": true,
+      "blocked_by_labels": [
+        "spawner"
+      ],
+      "blocked_by_ids": [
+        "spawner__24"
+      ]
+    },
+    {
+      "id": 25,
+      "vertices": [
+        [
+          1460.0,
+          660.0
+        ],
+        [
+          1460.0,
+          720.0
+        ],
+        [
+          1280.0,
+          720.0
+        ],
+        [
+          1280.0,
+          660.0
+        ]
+      ],
+      "neighbors": [
+        1,
+        5,
+        6,
+        21
+      ],
+      "source_region_labels": [
+        "blockade_1",
+        "corridor_2",
+        "room_1"
+      ],
+      "source_region_ids": [
+        "blockade_1",
+        "corridor_2",
+        "room_1__7"
+      ],
+      "blocked": true,
+      "blocked_by_labels": [
+        "blockade_1"
+      ],
+      "blocked_by_ids": [
+        "blockade_1"
+      ]
+    }
+  ],
+  "runtime_blockers": [
+    {
+      "label": "spawner",
+      "runtime_id": "spawner__21",
+      "source_item_id": 21,
+      "toggle_id": "spawner__21",
+      "kind": "circle",
+      "blocker_type": "spawner",
+      "owning_region": "room_1",
+      "enabled_on_start": true,
+      "x": 1220.0,
+      "y": 180.0,
+      "w": 120.0,
+      "h": 120.0,
+      "cell_ids": [
+        22
+      ]
+    },
+    {
+      "label": "spawner",
+      "runtime_id": "spawner__22",
+      "source_item_id": 22,
+      "toggle_id": "spawner__22",
+      "kind": "circle",
+      "blocker_type": "spawner",
+      "owning_region": "room_1",
+      "enabled_on_start": true,
+      "x": 1420.0,
+      "y": 320.0,
+      "w": 120.0,
+      "h": 120.0,
+      "cell_ids": [
+        23
+      ]
+    },
+    {
+      "label": "spawner",
+      "runtime_id": "spawner__24",
+      "source_item_id": 24,
+      "toggle_id": "spawner__24",
+      "kind": "circle",
+      "blocker_type": "spawner",
+      "owning_region": "room_1",
+      "enabled_on_start": true,
+      "x": 1240.0,
+      "y": 460.0,
+      "w": 120.0,
+      "h": 120.0,
+      "cell_ids": [
+        24
+      ]
+    },
+    {
+      "label": "blockade_1",
+      "runtime_id": "blockade_1",
+      "source_item_id": 25,
+      "toggle_id": "blockade_1",
+      "kind": "rect",
+      "blocker_type": "blockade",
+      "owning_region": "blockade_1",
+      "enabled_on_start": true,
+      "x": 1280.0,
+      "y": 660.0,
+      "w": 180.0,
+      "h": 60.0,
+      "cell_ids": [
+        25
+      ]
+    }
+  ],
+  "wall_edges": [
+    {
+      "ax": 45,
+      "ay": 224,
+      "bx": 76,
+      "by": 167,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 76,
+      "ay": 167,
+      "bx": 117,
+      "by": 117,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 117,
+      "ay": 117,
+      "bx": 167,
+      "by": 76,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 167,
+      "ay": 76,
+      "bx": 224,
+      "by": 45,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 224,
+      "ay": 45,
+      "bx": 286,
+      "by": 26,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 286,
+      "ay": 26,
+      "bx": 350,
+      "by": 20,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 350,
+      "ay": 20,
+      "bx": 414,
+      "by": 26,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 414,
+      "ay": 26,
+      "bx": 476,
+      "by": 45,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 476,
+      "ay": 45,
+      "bx": 533,
+      "by": 76,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 533,
+      "ay": 76,
+      "bx": 583,
+      "by": 117,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 583,
+      "ay": 117,
+      "bx": 624,
+      "by": 167,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 624,
+      "ay": 167,
+      "bx": 655,
+      "by": 224,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 655,
+      "ay": 224,
+      "bx": 672,
+      "by": 280,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 666,
+      "ay": 440,
+      "bx": 624,
+      "by": 533,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 624,
+      "ay": 533,
+      "bx": 583,
+      "by": 583,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 583,
+      "ay": 583,
+      "bx": 533,
+      "by": 624,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 533,
+      "ay": 624,
+      "bx": 476,
+      "by": 655,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 476,
+      "ay": 655,
+      "bx": 414,
+      "by": 674,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 414,
+      "ay": 674,
+      "bx": 350,
+      "by": 680,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 350,
+      "ay": 680,
+      "bx": 286,
+      "by": 674,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 286,
+      "ay": 674,
+      "bx": 224,
+      "by": 655,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 224,
+      "ay": 655,
+      "bx": 167,
+      "by": 624,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 167,
+      "ay": 624,
+      "bx": 117,
+      "by": 583,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 117,
+      "ay": 583,
+      "bx": 76,
+      "by": 533,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 76,
+      "ay": 533,
+      "bx": 45,
+      "by": 476,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 45,
+      "ay": 476,
+      "bx": 26,
+      "by": 414,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 26,
+      "ay": 414,
+      "bx": 20,
+      "by": 350,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 20,
+      "ay": 350,
+      "bx": 26,
+      "by": 286,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 26,
+      "ay": 286,
+      "bx": 45,
+      "by": 224,
+      "owner_poly": 0,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1643,
+      "ay": 623,
+      "bx": 1593,
+      "by": 664,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1593,
+      "ay": 664,
+      "bx": 1536,
+      "by": 695,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1536,
+      "ay": 695,
+      "bx": 1460,
+      "by": 715,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1460,
+      "ay": 715,
+      "bx": 1460,
+      "by": 660,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1492,
+      "ay": 439,
+      "bx": 1530,
+      "by": 413,
+      "owner_poly": 1,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1740,
+      "ay": 390,
+      "bx": 1734,
+      "by": 454,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1734,
+      "ay": 454,
+      "bx": 1715,
+      "by": 516,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1715,
+      "ay": 516,
+      "bx": 1684,
+      "by": 573,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1684,
+      "ay": 573,
+      "bx": 1643,
+      "by": 623,
+      "owner_poly": 1,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1530,
+      "ay": 413,
+      "bx": 1539,
+      "by": 368,
+      "owner_poly": 2,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1715,
+      "ay": 264,
+      "bx": 1734,
+      "by": 326,
+      "owner_poly": 2,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1734,
+      "ay": 326,
+      "bx": 1740,
+      "by": 390,
+      "owner_poly": 2,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1643,
+      "ay": 157,
+      "bx": 1684,
+      "by": 207,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1684,
+      "ay": 207,
+      "bx": 1715,
+      "by": 264,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1513,
+      "ay": 330,
+      "bx": 1468,
+      "by": 321,
+      "owner_poly": 3,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1339,
+      "ay": 228,
+      "bx": 1313,
+      "by": 190,
+      "owner_poly": 3,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1284,
+      "ay": 85,
+      "bx": 1346,
+      "by": 66,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1346,
+      "ay": 66,
+      "bx": 1410,
+      "by": 60,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1410,
+      "ay": 60,
+      "bx": 1474,
+      "by": 66,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1474,
+      "ay": 66,
+      "bx": 1536,
+      "by": 85,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1536,
+      "ay": 85,
+      "bx": 1593,
+      "by": 116,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1593,
+      "ay": 116,
+      "bx": 1643,
+      "by": 157,
+      "owner_poly": 3,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1085,
+      "ay": 440,
+      "bx": 666,
+      "by": 440,
+      "owner_poly": 4,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 672,
+      "ay": 280,
+      "bx": 1100,
+      "by": 280,
+      "owner_poly": 4,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1280,
+      "ay": 693,
+      "bx": 1227,
+      "by": 664,
+      "owner_poly": 5,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1227,
+      "ay": 664,
+      "bx": 1177,
+      "by": 623,
+      "owner_poly": 5,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1177,
+      "ay": 623,
+      "bx": 1136,
+      "by": 573,
+      "owner_poly": 5,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1136,
+      "ay": 573,
+      "bx": 1105,
+      "by": 516,
+      "owner_poly": 5,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1241,
+      "ay": 532,
+      "bx": 1267,
+      "by": 570,
+      "owner_poly": 5,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1280,
+      "ay": 660,
+      "bx": 1280,
+      "by": 693,
+      "owner_poly": 5,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1312,
+      "ay": 579,
+      "bx": 1350,
+      "by": 553,
+      "owner_poly": 6,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1460,
+      "ay": 660,
+      "bx": 1280,
+      "by": 660,
+      "owner_poly": 6,
+      "wall_type": "blocker",
+      "toggle_id": "blockade_1"
+    },
+    {
+      "ax": 1350,
+      "ay": 553,
+      "bx": 1359,
+      "by": 508,
+      "owner_poly": 7,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1447,
+      "ay": 430,
+      "bx": 1492,
+      "by": 439,
+      "owner_poly": 7,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1539,
+      "ay": 368,
+      "bx": 1513,
+      "by": 330,
+      "owner_poly": 8,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1330,
+      "ay": 273,
+      "bx": 1339,
+      "by": 228,
+      "owner_poly": 9,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1468,
+      "ay": 321,
+      "bx": 1430,
+      "by": 347,
+      "owner_poly": 9,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1313,
+      "ay": 190,
+      "bx": 1268,
+      "by": 181,
+      "owner_poly": 10,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1227,
+      "ay": 116,
+      "bx": 1284,
+      "by": 85,
+      "owner_poly": 10,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1250,
+      "ay": 487,
+      "bx": 1241,
+      "by": 532,
+      "owner_poly": 11,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1105,
+      "ay": 516,
+      "bx": 1085,
+      "by": 440,
+      "owner_poly": 11,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1267,
+      "ay": 570,
+      "bx": 1312,
+      "by": 579,
+      "owner_poly": 12,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1359,
+      "ay": 508,
+      "bx": 1333,
+      "by": 470,
+      "owner_poly": 13,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1421,
+      "ay": 392,
+      "bx": 1447,
+      "by": 430,
+      "owner_poly": 13,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1292,
+      "ay": 299,
+      "bx": 1330,
+      "by": 273,
+      "owner_poly": 14,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1430,
+      "ay": 347,
+      "bx": 1421,
+      "by": 392,
+      "owner_poly": 14,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__22"
+    },
+    {
+      "ax": 1230,
+      "ay": 207,
+      "bx": 1221,
+      "by": 252,
+      "owner_poly": 15,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1100,
+      "ay": 280,
+      "bx": 1136,
+      "by": 207,
+      "owner_poly": 15,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1136,
+      "ay": 207,
+      "bx": 1177,
+      "by": 157,
+      "owner_poly": 15,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1177,
+      "ay": 157,
+      "bx": 1227,
+      "by": 116,
+      "owner_poly": 15,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1268,
+      "ay": 181,
+      "bx": 1230,
+      "by": 207,
+      "owner_poly": 16,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1221,
+      "ay": 252,
+      "bx": 1247,
+      "by": 290,
+      "owner_poly": 17,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1288,
+      "ay": 461,
+      "bx": 1250,
+      "by": 487,
+      "owner_poly": 18,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1247,
+      "ay": 290,
+      "bx": 1292,
+      "by": 299,
+      "owner_poly": 18,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__21"
+    },
+    {
+      "ax": 1333,
+      "ay": 470,
+      "bx": 1288,
+      "by": 461,
+      "owner_poly": 19,
+      "wall_type": "blocker",
+      "toggle_id": "spawner__24"
+    },
+    {
+      "ax": 1000,
+      "ay": 1250,
+      "bx": 1021,
+      "by": 1147,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1021,
+      "ay": 1147,
+      "bx": 1079,
+      "by": 1059,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1079,
+      "ay": 1059,
+      "bx": 1167,
+      "by": 1001,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1167,
+      "ay": 1001,
+      "bx": 1217,
+      "by": 985,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1217,
+      "ay": 985,
+      "bx": 1280,
+      "by": 981,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1460,
+      "ay": 1058,
+      "bx": 1519,
+      "by": 1147,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1519,
+      "ay": 1147,
+      "bx": 1540,
+      "by": 1250,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1540,
+      "ay": 1250,
+      "bx": 1519,
+      "by": 1353,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1519,
+      "ay": 1353,
+      "bx": 1461,
+      "by": 1441,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1461,
+      "ay": 1441,
+      "bx": 1420,
+      "by": 1474,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1420,
+      "ay": 1474,
+      "bx": 1373,
+      "by": 1499,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1373,
+      "ay": 1499,
+      "bx": 1270,
+      "by": 1520,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1270,
+      "ay": 1520,
+      "bx": 1167,
+      "by": 1499,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1167,
+      "ay": 1499,
+      "bx": 1079,
+      "by": 1441,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1079,
+      "ay": 1441,
+      "bx": 1021,
+      "by": 1353,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1021,
+      "ay": 1353,
+      "bx": 1000,
+      "by": 1250,
+      "owner_poly": 20,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1280,
+      "ay": 981,
+      "bx": 1280,
+      "by": 720,
+      "owner_poly": 21,
+      "wall_type": "boundary",
+      "toggle_id": ""
+    },
+    {
+      "ax": 1280,
+      "ay": 720,
+      "bx": 1460,
+      "by": 720,
+      "owner_poly": 21,
+      "wall_type": "blocker",
+      "toggle_id": "blockade_1"
+    },
+    {
+      "ax": 1460,
+      "ay": 720,
+      "bx": 1460,
+      "by": 1058,
+      "owner_poly": 21,
+      "wall_type": "boundary",
+      "toggle_id": ""
     }
   ],
   "triggers": [
     {
       "id": 12,
-      "label": "trigger_1",
+      "runtime_id": "room_0__12",
+      "label": "room_0",
       "category": "trigger",
       "kind": "circle",
       "x": 20.0,
@@ -520,27 +2543,43 @@
         350.0,
         350.0
       ]
-    }
-  ],
-  "objects": [
+    },
     {
-      "id": 14,
-      "label": "enemy1_1",
-      "category": "object",
+      "id": 16,
+      "runtime_id": "room_1__16",
+      "label": "room_1",
+      "category": "trigger",
       "kind": "circle",
-      "x": 1140.0,
-      "y": 1120.0,
-      "w": 80.0,
-      "h": 80.0,
+      "x": 1080.0,
+      "y": 60.0,
+      "w": 660.0,
+      "h": 660.0,
       "center": [
-        1180.0,
-        1160.0
+        1410.0,
+        390.0
+      ]
+    },
+    {
+      "id": 17,
+      "runtime_id": "room_2__17",
+      "label": "room_2",
+      "category": "trigger",
+      "kind": "circle",
+      "x": 1000.0,
+      "y": 980.0,
+      "w": 540.0,
+      "h": 540.0,
+      "center": [
+        1270.0,
+        1250.0
       ]
     }
   ],
+  "objects": [],
   "points": [
     {
       "id": 13,
+      "runtime_id": "player_spawn",
       "label": "player_spawn",
       "category": "point",
       "kind": "point",
@@ -549,6 +2588,58 @@
       "position": [
         340.0,
         340.0
+      ]
+    },
+    {
+      "id": 15,
+      "runtime_id": "base_spawner_1__15",
+      "label": "base_spawner_1",
+      "category": "point",
+      "kind": "point",
+      "x": 1140.0,
+      "y": 1120.0,
+      "position": [
+        1140.0,
+        1120.0
+      ]
+    },
+    {
+      "id": 18,
+      "runtime_id": "base_spawner_1__18",
+      "label": "base_spawner_1",
+      "category": "point",
+      "kind": "point",
+      "x": 1280.0,
+      "y": 240.0,
+      "position": [
+        1280.0,
+        240.0
+      ]
+    },
+    {
+      "id": 19,
+      "runtime_id": "base_spawner_1__19",
+      "label": "base_spawner_1",
+      "category": "point",
+      "kind": "point",
+      "x": 1300.0,
+      "y": 520.0,
+      "position": [
+        1300.0,
+        520.0
+      ]
+    },
+    {
+      "id": 20,
+      "runtime_id": "base_spawner_1__20",
+      "label": "base_spawner_1",
+      "category": "point",
+      "kind": "point",
+      "x": 1480.0,
+      "y": 380.0,
+      "position": [
+        1480.0,
+        380.0
       ]
     }
   ]

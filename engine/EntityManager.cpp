@@ -1,106 +1,95 @@
 #include "EntityManager.h"
-#include "AnimationManager.h"
-#include "GameLoop.h"
-#include "MapLoader.h"
-#include "NavigationSystem.h"
 
 #include <SDL3/SDL.h>
+#include <algorithm>
 #include <iostream>
 
-bool CheckCircularCollision(const SDL_FRect& a, int radiusA, const SDL_FRect& b, int radiusB) {
-    float ax = a.x + a.w / 2;
-    float ay = a.y + a.h;
-    float bx = b.x + b.w / 2;
-    float by = b.y + b.h;
-    float dx = ax - bx;
-    float dy = ay - by;
-    float distanceSquared = dx * dx + dy * dy;
-    float radiusSum = radiusA + radiusB;
-    return distanceSquared < (radiusSum * radiusSum);
-}
-
-void EntityManager::LoadTexture(int unitType, SDL_Texture* texture) {
-    std::cout << "Loading texture for: " << unitType << std::endl;
-    spriteSheets[unitType] = texture;
-    if (texture) {
-        std::cout << "Texture loaded successfully for: " << unitType << std::endl;
-    } else {
-        std::cerr << "Failed to load texture for: " << unitType << std::endl;
-    }
-}
-
-void EntityManager::AddEntity(int controller, int radius, const SDL_FRect& position, int unitType, Animation animation, float speed, float visionRange, float attackRange, int hp) {
+Entity& EntityManager::AddEntity(int radius,
+                                 const SDL_FRect& position,
+                                 float speed) {
     static int nextID = 1;
 
     Entity entity{};
     entity.id = nextID++;
-    entity.controller = controller;
     entity.radius = radius;
     entity.position = position;
-    entity.unitType = unitType;
     entity.speed = speed;
-    entity.visionRange = visionRange;
-    entity.attackRange = attackRange;
-    entity.hp = hp;
 
-    std::cout << "Adding entity: " << entity.id << " controlled by: " << controller << std::endl;
-
-    animationManager.AddAnimation(entity.id, animation);
     entities.push_back(std::move(entity));
+    entityIndex[entities.back().id] = entities.size() - 1;
+    return entities.back();
 }
 
 void EntityManager::RemoveDeadEntities() {
-    for (auto it = entities.begin(); it != entities.end(); ) {
-        if (it->isDead) {
-            animationManager.RemoveAnimation(it->id);
-            it = entities.erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
-
-void EntityManager::UpdateEntities(float deltaTime) {
-    NavigationSystem::Instance().Update(*this, deltaTime);
-    movementSystem.Update(entities, animationManager, deltaTime);
-    animationManager.UpdateAnimations(deltaTime);
-
-    /*
-    for (size_t i = 0; i < entities.size(); i++) {
-        for (size_t j = i + 1; j < entities.size(); j++) {
-            if (CheckCircularCollision(entities[i].position, entities[i].radius, entities[j].position, entities[j].radius)) {
-                std::cout << "Collision detected between Entity " << entities[i].id << " and Entity " << entities[j].id << std::endl;
+    size_t i = 0;
+    while (i < entities.size()) {
+        if (entities[i].isDead) {
+            animationManager.RemoveEntityAnim(entities[i].id);
+            if (i + 1 < entities.size()) {
+                entities[i] = std::move(entities.back());
             }
+            entities.pop_back();
+        } else {
+            ++i;
         }
     }
-    */
+    entityIndex.clear();
+    entityIndex.reserve(entities.size());
+    for (size_t j = 0; j < entities.size(); ++j) {
+        entityIndex[entities[j].id] = j;
+    }
 }
 
-void EntityManager::RenderEntities(SDL_Renderer* renderer, float& cameraX, float& cameraY, float& cameraW, float& cameraH, float /*deltaTime*/) {
+Entity* EntityManager::GetEntityById(int id) {
+    const auto it = entityIndex.find(id);
+    if (it == entityIndex.end()) return nullptr;
+    return &entities[it->second];
+}
+
+const Entity* EntityManager::GetEntityById(int id) const {
+    const auto it = entityIndex.find(id);
+    if (it == entityIndex.end()) return nullptr;
+    return &entities[it->second];
+}
+
+void EntityManager::RenderEntities(SDL_Renderer* renderer,
+                                   float& cameraX,
+                                   float& cameraY,
+                                   float& cameraW,
+                                   float& cameraH,
+                                   float /*deltaTime*/) {
+    renderScratch.clear();
+    renderScratch.reserve(entities.size());
+
     for (auto& entity : entities) {
-        if (spriteSheets.find(entity.unitType) != spriteSheets.end()) {
-            SDL_Texture* texture = spriteSheets[entity.unitType];
-            Animation& animation = animationManager.GetAnimation(entity.id);
-
-            if (animation.frames.empty()) {
-                continue;
-            }
-
-            int renderX = static_cast<int>(entity.position.x - cameraX);
-            int renderY = static_cast<int>(entity.position.y - cameraY);
-
-            int spriteW = animation.spriteW;
-            int spriteH = animation.spriteH;
-
-            if (renderX + spriteW < 0 || renderX > cameraW ||
-                renderY + spriteH < 0 || renderY > cameraH) {
-                continue;
-            }
-
-            bool isLeft = (entity.lastDirection == LEFT);
-            animationManager.RenderEntity(renderer, texture, animation, renderX, renderY, isLeft);
-        } else {
-            std::cerr << "No sprite sheet found for entity: " << entity.id << std::endl;
+        if (!entity.isDead) {
+            renderScratch.push_back(&entity);
         }
+    }
+
+    std::stable_sort(renderScratch.begin(), renderScratch.end(),
+        [](const Entity* a, const Entity* b) {
+            if (a->renderPriority != b->renderPriority) {
+                return a->renderPriority < b->renderPriority;
+            }
+            return a->position.y < b->position.y;
+        });
+
+    for (Entity* entity : renderScratch) {
+        int spriteW = 0;
+        int spriteH = 0;
+        if (!animationManager.GetCurrentFrameDrawSize(entity->id, spriteW, spriteH)) {
+            continue;
+        }
+
+        const int renderX = static_cast<int>(entity->position.x - cameraX);
+        const int renderY = static_cast<int>(entity->position.y - cameraY);
+
+        if (renderX + spriteW < 0 || renderX > cameraW ||
+            renderY + spriteH < 0 || renderY > cameraH) {
+            continue;
+        }
+
+        animationManager.RenderEntity(renderer, entity->id, renderX, renderY);
     }
 }

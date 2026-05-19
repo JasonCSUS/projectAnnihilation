@@ -16,7 +16,7 @@
     <ClCompile Include="E:\projectAnnihilation\engine\GlobalTasks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projectAnnihilation\engine\InputHandler.cpp">
+    <ClCompile Include="E:\projectAnnihilation\engine\HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\MapLoader.cpp">
@@ -28,16 +28,118 @@
     <ClCompile Include="E:\projectAnnihilation\engine\NavMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMeshBlockers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMeshBuckets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMeshCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMeshPathing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavMeshQueries.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavPriorDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationGroups.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationLocalRoutes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationMacroRoutes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationRegionGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationStateCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\NavigationSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationTraining.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\NavigationWorkers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\engine\Rigidbodies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\engine\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\Difficulty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\EntityData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\EntityDefinitions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\src\EntityLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\GameContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\GameEntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\GameHUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="E:\projectAnnihilation\src\GameMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\JsonUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\Metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\MinimapSection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\PlayerInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\RuntimeData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\SelectionPanelSection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\SelectionState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\SpawnFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\SpawnerSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\UnitAnimations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\UnitCollisionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\UnitVisuals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\projectAnnihilation\src\Units.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,6 +159,9 @@
     <ClInclude Include="E:\projectAnnihilation\engine\GlobalTasks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\engine\InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,13 +174,106 @@
     <ClInclude Include="E:\projectAnnihilation\engine\NavMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavMeshBuckets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavMeshInternal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavPriorDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationGroups.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationLocalRoutes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationMacroRoutes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationRegionGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationStateCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\engine\NavigationSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationTraining.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\NavigationWorkers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\engine\Rigidbodies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\Difficulty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\EntityData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\EntityDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\src\EntityLogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\GameContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\GameEntityManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\GameHUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="E:\projectAnnihilation\src\GameMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\JsonUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\Metadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\MinimapSection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\PlayerInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\RuntimeData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\SelectionPanelSection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\SelectionState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\SpawnFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\SpawnerSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\UnitAnimations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\UnitCollisionSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\UnitVisuals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\projectAnnihilation\src\Units.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
